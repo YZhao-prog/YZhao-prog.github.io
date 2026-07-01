@@ -107,6 +107,14 @@
   .edu .when{font-family:ui-monospace,monospace;font-size:13px;color:var(--accent);white-space:nowrap}
   .edu b{font-size:16.5px}
 
+  .focus{margin-top:24px}
+  .focus .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:10px;font-weight:600}
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:720px){.principles{grid-template-columns:1fr}}
+  .pr{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+  .pr b{font-size:14.5px}
+  .pr span{color:var(--muted);font-size:13.5px}
+  .subhead{font-size:18px;margin-top:34px}
   footer{border-top:1px solid var(--border);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
   footer a{color:var(--accent);font-weight:600}
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
@@ -155,6 +163,24 @@
     Outside of work I build databases from the ground up in Rust and Go to understand systems deeply.
     I hold a 3.8 GPA at Northeastern and a CS degree from CUHK-Shenzhen.
   </p>
+
+  <div class="focus">
+    <div class="lbl">Technical Focus</div>
+    <div class="chips">
+      <span>Distributed Consensus &amp; Replication · Raft</span>
+      <span>Consistency &amp; Concurrency · Linearizability · MVCC</span>
+      <span>Storage Engines · LSM-Tree · Compaction · Caching</span>
+      <span>Backend Reliability &amp; Fault Tolerance</span>
+    </div>
+  </div>
+
+  <h3 class="subhead">Engineering Philosophy</h3>
+  <div class="principles">
+    <div class="pr"><b>✅ Correct before fast</b><span>Performance comes after the invariants hold.</span></div>
+    <div class="pr"><b>🔍 Make failure modes explicit</b><span>Design for what happens when things break.</span></div>
+    <div class="pr"><b>🛠 Design for operability</b><span>Real systems get operated — not just the happy path.</span></div>
+    <div class="pr"><b>📈 Benchmark, don't assume</b><span>Measure before calling something "fast enough".</span></div>
+  </div>
 </section>
 
 <section id="experience" class="wrap reveal">
