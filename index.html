@@ -4,120 +4,157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yang Zhao — Backend Software Engineer</title>
-<meta name="description" content="Yang Zhao — Backend Software Engineer specializing in distributed systems, storage engines, and cloud infrastructure. MS Information Systems @ Northeastern. Seeking New Grad SWE roles.">
+<meta name="description" content="Yang Zhao — Backend Software Engineer specializing in distributed systems and infrastructure. M.S. Information Systems @ Northeastern. Seeking New Grad SWE roles.">
 <meta property="og:title" content="Yang Zhao — Backend Software Engineer">
 <meta property="og:description" content="Distributed systems & backend engineer. C++, Rust, Go. Ex-Cisco (Splunk). Seeking New Grad SWE roles.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88' font-family='Georgia,serif'>YZ</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0b0f17; --bg2:#0f1522; --panel:#141b2b; --border:#243049;
-    --text:#e8edf6; --muted:#94a3b8; --accent:#5b8cff; --accent2:#7c5cff;
-    --chip:#1b2436; --shadow:0 10px 40px rgba(0,0,0,.35);
+    --bg:#f7f5f0; --bg2:#efebe3; --panel:#fffdf8; --border:#e3ddd0;
+    --text:#1d1a15; --muted:#726c60; --faint:#a49d8e;
+    --accent:#9c7a48; --accent-soft:rgba(156,122,72,.10);
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   }
-  [data-theme="light"]{
-    --bg:#f6f8fc; --bg2:#eef2f9; --panel:#ffffff; --border:#e2e8f2;
-    --text:#0f1a2e; --muted:#5b6b85; --accent:#2f6bff; --accent2:#6b46ff;
-    --chip:#eef2fb; --shadow:0 10px 30px rgba(20,40,90,.10);
+  [data-theme="dark"]{
+    --bg:#14120e; --bg2:#1a1712; --panel:#1c1813; --border:#332c22;
+    --text:#f1ece1; --muted:#a79f8f; --faint:#6f665579;
+    --accent:#cAa066; --accent:#caa068; --accent-soft:rgba(202,160,104,.12);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:400;
+    line-height:1.7;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:940px;margin:0 auto;padding:0 22px}
-  section{padding:64px 0;scroll-margin-top:70px}
+  ::selection{background:var(--accent-soft)}
+  .wrap{max-width:860px;margin:0 auto;padding:0 30px}
+  section{padding:96px 0}
 
   /* nav */
-  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);
-    backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-  .nav-in{max-width:940px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:20px}
-  .brand{font-weight:700;letter-spacing:.3px;margin-right:auto}
-  .brand span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .nav-links{display:flex;gap:20px}
-  .nav-links a{color:var(--muted);font-size:14px;font-weight:500;transition:color .2s}
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);
+    backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:860px;margin:0 auto;padding:18px 30px;display:flex;align-items:center;gap:26px}
+  .monogram{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.04em;margin-right:auto}
+  .nav-links{display:flex;gap:30px}
+  .nav-links a{color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase;
+    letter-spacing:.18em;transition:color .25s;position:relative}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;
+    background:var(--accent);transition:width .3s}
   .nav-links a:hover{color:var(--text)}
-  .icon-btn{background:var(--chip);border:1px solid var(--border);color:var(--text);width:34px;height:34px;
-    border-radius:9px;cursor:pointer;font-size:15px;display:grid;place-items:center}
-  @media(max-width:640px){.nav-links{display:none}}
+  .nav-links a:hover::after{width:100%}
+  .icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);width:38px;height:38px;
+    border-radius:50%;cursor:pointer;font-size:14px;display:grid;place-items:center;transition:border-color .25s}
+  .icon-btn:hover{border-color:var(--accent)}
+  @media(max-width:620px){.nav-links{display:none}}
+
+  /* kicker label */
+  .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.28em;color:var(--accent);font-weight:600}
 
   /* hero */
-  .hero{padding-top:70px;text-align:left}
-  .avail{display:inline-flex;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--border);
-    color:var(--muted);font-size:13px;padding:6px 13px;border-radius:999px;margin-bottom:22px}
-  .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
-  .hero h1{font-size:clamp(38px,7vw,62px);line-height:1.05;letter-spacing:-1.5px;font-weight:800}
-  .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .role{font-size:clamp(18px,3vw,23px);color:var(--muted);margin-top:14px;font-weight:500}
-  .intro{margin-top:20px;max-width:640px;color:var(--muted);font-size:16.5px}
-  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;font-size:14.5px;
-    font-weight:600;border:1px solid var(--border);transition:transform .15s,box-shadow .2s}
-  .btn:hover{transform:translateY(-2px)}
-  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;box-shadow:var(--shadow)}
-  .btn.ghost{background:var(--panel);color:var(--text)}
+  .hero{padding:110px 0 70px}
+  .avail{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.05em;
+    color:var(--muted);margin-bottom:34px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#5a8f5a;box-shadow:0 0 0 4px rgba(90,143,90,.15)}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(64px,13vw,132px);line-height:.92;
+    letter-spacing:-.02em;margin:18px 0 0}
+  .hero .lede{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(22px,4vw,32px);
+    color:var(--muted);margin-top:26px;letter-spacing:.01em}
+  .intro{margin-top:30px;max-width:600px;color:var(--muted);font-size:16px;font-weight:300}
+  .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.16em;border-radius:2px;transition:all .28s;border:1px solid var(--text)}
+  .btn.primary{background:var(--text);color:var(--bg)}
+  .btn.primary:hover{background:transparent;color:var(--text)}
+  .btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+  .btn.ghost:hover{border-color:var(--text)}
 
   /* section heads */
-  .head{display:flex;align-items:baseline;gap:14px;margin-bottom:34px}
-  .head h2{font-size:26px;letter-spacing:-.5px}
-  .head .no{font-family:ui-monospace,monospace;color:var(--accent);font-size:14px;font-weight:600}
-  .head .line{flex:1;height:1px;background:var(--border)}
+  .shead{margin-bottom:48px}
+  .shead .num{font-size:11px;letter-spacing:.28em;color:var(--faint);font-weight:600}
+  .shead h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,6vw,52px);line-height:1;
+    letter-spacing:-.01em;margin-top:10px}
 
-  /* experience timeline */
-  .exp{position:relative;padding-left:26px;border-left:2px solid var(--border)}
-  .exp .item{position:relative;padding-bottom:38px}
-  .exp .item:last-child{padding-bottom:0}
-  .exp .item::before{content:"";position:absolute;left:-33px;top:6px;width:12px;height:12px;border-radius:50%;
-    background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
-  .exp .when{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
-  .exp .title{font-size:18px;font-weight:700;margin-top:4px}
-  .exp .co{color:var(--muted);font-size:14.5px;margin-top:2px}
-  .exp ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
-  .exp li{margin-bottom:7px}
-  .exp li b{color:var(--text);font-weight:600}
+  .lead{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.55;color:var(--text);max-width:680px}
+  .body{color:var(--muted);font-size:16px;font-weight:300;max-width:680px}
 
-  /* project cards */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media(max-width:720px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;
-    transition:transform .18s,border-color .2s;box-shadow:var(--shadow)}
-  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
-  .card h3{font-size:18px;display:flex;align-items:center;gap:9px}
-  .card .stack{margin:10px 0 12px;display:flex;flex-wrap:wrap;gap:6px}
-  .card p{color:var(--muted);font-size:14.5px}
-  .card ul{margin:8px 0 0;padding-left:17px;color:var(--muted);font-size:14px}
-  .card li{margin-bottom:5px}
-  .tag{font-size:11.5px;padding:3px 9px;border-radius:999px;background:var(--chip);border:1px solid var(--border);color:var(--muted)}
-  .card .links{margin-top:14px;display:flex;gap:14px}
-  .card .links a{font-size:13.5px;color:var(--accent);font-weight:600}
+  /* focus + philosophy */
+  .focus{margin-top:40px}
+  .focus .lbl,.subhead-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.24em;color:var(--accent);
+    font-weight:600;margin-bottom:18px}
+  .focus ul{list-style:none;display:grid;gap:0}
+  .focus li{padding:15px 0;border-top:1px solid var(--border);font-size:15.5px;color:var(--text);
+    display:flex;gap:16px;align-items:baseline}
+  .focus li:last-child{border-bottom:1px solid var(--border)}
+  .focus li i{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:15px;min-width:26px}
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);
+    border:1px solid var(--border);margin-top:22px}
+  @media(max-width:640px){.principles{grid-template-columns:1fr}}
+  .pr{background:var(--bg);padding:26px 24px}
+  .pr b{display:block;font-family:var(--serif);font-size:20px;font-weight:500;margin-bottom:6px}
+  .pr span{color:var(--muted);font-size:14px;font-weight:300}
+  .subhead{margin-top:56px}
+
+  /* experience */
+  .exp .item{padding:34px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;gap:24px}
+  .exp .item:last-child{border-bottom:1px solid var(--border)}
+  @media(max-width:640px){.exp .item{grid-template-columns:1fr;gap:10px}}
+  .exp .when{font-size:12px;letter-spacing:.05em;color:var(--faint);padding-top:6px}
+  .exp .title{font-family:var(--serif);font-size:25px;font-weight:500}
+  .exp .co{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.12em;margin-top:4px;font-weight:500}
+  .exp ul{margin:16px 0 0;padding-left:0;list-style:none}
+  .exp li{margin-bottom:9px;color:var(--muted);font-size:15px;font-weight:300;padding-left:20px;position:relative}
+  .exp li::before{content:"—";position:absolute;left:0;color:var(--accent)}
+
+  /* projects */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:30px 28px;
+    transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-5px);box-shadow:0 24px 50px -24px rgba(60,45,20,.25)}
+  .card h3{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.01em}
+  .card .stack{margin:14px 0 16px;display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-size:11px;letter-spacing:.04em;padding:4px 11px;border:1px solid var(--border);
+    border-radius:999px;color:var(--muted)}
+  .card ul{margin:4px 0 0;padding-left:0;list-style:none}
+  .card li{margin-bottom:8px;color:var(--muted);font-size:14px;font-weight:300;padding-left:18px;position:relative}
+  .card li::before{content:"·";position:absolute;left:4px;color:var(--accent);font-weight:700}
+  .card p{color:var(--muted);font-size:14.5px;font-weight:300}
+  .card .links{margin-top:auto;padding-top:20px;display:flex;gap:22px}
+  .card .links a{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);
+    font-weight:600;position:relative}
+  .card .links a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--accent);transition:width .3s}
+  .card .links a:hover::after{width:100%}
 
   /* skills */
-  .skills{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media(max-width:720px){.skills{grid-template-columns:1fr}}
-  .skillrow{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
-  .skillrow h4{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:10px}
-  .chips{display:flex;flex-wrap:wrap;gap:7px}
-  .chips span{font-size:13px;padding:5px 11px;border-radius:8px;background:var(--chip);border:1px solid var(--border)}
+  .skills{display:grid;grid-template-columns:1fr 1fr;gap:44px 60px}
+  @media(max-width:640px){.skills{grid-template-columns:1fr;gap:32px}}
+  .skillrow h4{font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:14px;
+    padding-bottom:12px;border-bottom:1px solid var(--border)}
+  .skillrow p{color:var(--muted);font-size:15px;font-weight:300;line-height:2}
 
   /* education */
-  .edu{display:flex;flex-direction:column;gap:14px}
-  .edu .row{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
-    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  .edu .row .deg{color:var(--muted);font-size:14.5px;margin-top:3px}
-  .edu .when{font-family:ui-monospace,monospace;font-size:13px;color:var(--accent);white-space:nowrap}
-  .edu b{font-size:16.5px}
+  .edu .row{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;
+    gap:20px;flex-wrap:wrap;align-items:baseline}
+  .edu .row:last-child{border-bottom:1px solid var(--border)}
+  .edu b{font-family:var(--serif);font-size:23px;font-weight:500;display:block}
+  .edu .deg{color:var(--muted);font-size:14.5px;font-weight:300;margin-top:4px}
+  .edu .when{font-size:12px;letter-spacing:.05em;color:var(--faint);white-space:nowrap}
 
-  .focus{margin-top:24px}
-  .focus .lbl{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:10px;font-weight:600}
-  .principles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  @media(max-width:720px){.principles{grid-template-columns:1fr}}
-  .pr{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
-  .pr b{font-size:14.5px}
-  .pr span{color:var(--muted);font-size:13.5px}
-  .subhead{font-size:18px;margin-top:34px}
-  footer{border-top:1px solid var(--border);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
-  footer a{color:var(--accent);font-weight:600}
-  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+  footer{border-top:1px solid var(--border);padding:70px 30px;text-align:center}
+  footer .fk{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--text)}
+  footer a.mail{font-family:var(--serif);font-size:32px;color:var(--accent);display:inline-block;margin-top:12px;
+    border-bottom:1px solid transparent;transition:border-color .3s}
+  footer a.mail:hover{border-color:var(--accent)}
+  footer .fsocial{margin-top:26px;display:flex;gap:26px;justify-content:center}
+  footer .fsocial a{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
+  footer .fsocial a:hover{color:var(--text)}
+  footer .cr{margin-top:34px;font-size:12px;color:var(--faint)}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
   .reveal.in{opacity:1;transform:none}
 </style>
 </head>
@@ -125,186 +162,178 @@
 
 <nav>
   <div class="nav-in">
-    <div class="brand"><span>Yang Zhao</span></div>
+    <div class="monogram">Yang Zhao</div>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
+      <a href="#projects">Work</a>
       <a href="#skills">Skills</a>
       <a href="#education">Education</a>
     </div>
-    <button class="icon-btn" id="theme" title="Toggle theme">🌙</button>
+    <button class="icon-btn" id="theme" title="Toggle theme">☾</button>
   </div>
 </nav>
 
 <header class="hero wrap">
-  <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available Jan 2027</div>
-  <h1>Hi, I'm <span>Yang Zhao</span>.<br>I build reliable<br>distributed backends.</h1>
-  <p class="role">Backend Software Engineer · Distributed Systems &amp; Storage</p>
-  <p class="intro">M.S. in Information Systems at Northeastern University, graduating Dec 2026.
+  <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available January 2027</div>
+  <div class="kicker">Backend Software Engineer</div>
+  <h1>Yang<br>Zhao</h1>
+  <p class="lede">Distributed systems, storage &amp; infrastructure.</p>
+  <p class="intro">M.S. in Information Systems at Northeastern University, graduating December 2026.
     I'm a backend engineer with software engineering internship experience at Cisco (Splunk),
     and I enjoy working on distributed systems and infrastructure.</p>
   <div class="cta">
-    <a class="btn primary" href="mailto:yangzhao200124@gmail.com">✉️ Email me</a>
-    <a class="btn ghost" href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">in LinkedIn</a>
-    <a class="btn ghost" href="https://github.com/YZhao-prog" target="_blank" rel="noopener">⌥ GitHub</a>
-    <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">📄 Resume</a>
+    <a class="btn primary" href="mailto:yangzhao200124@gmail.com">Get in touch</a>
+    <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
+    <a class="btn ghost" href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="btn ghost" href="https://github.com/YZhao-prog" target="_blank" rel="noopener">GitHub</a>
   </div>
 </header>
 
 <section id="about" class="wrap reveal">
-  <div class="head"><span class="no">01</span><h2>About</h2><span class="line"></span></div>
-  <p style="color:var(--muted);font-size:16.5px;max-width:720px">
-    I'm a backend software engineer focused on distributed systems and infrastructure. I've completed
-    software engineering internships at Cisco (Splunk), working on their distributed search platform,
-    and I enjoy building systems from the ground up to understand how they really work. I'm finishing my
-    M.S. in Information Systems at Northeastern University (GPA 3.8), building on a CS degree from
-    CUHK-Shenzhen, and I'm looking for new-grad software engineering roles.
-  </p>
+  <div class="shead"><span class="num">01 — ABOUT</span><h2>Profile</h2></div>
+  <p class="lead">I'm a backend software engineer focused on distributed systems and infrastructure —
+    drawn to the parts of a system that have to stay correct under pressure.</p>
+  <p class="body" style="margin-top:22px">I've completed software engineering internships at Cisco (Splunk),
+    working on their distributed search platform, and I enjoy building systems from the ground up to
+    understand how they really work. I'm finishing my M.S. in Information Systems at Northeastern University
+    (GPA 3.8), building on a CS degree from CUHK-Shenzhen.</p>
 
   <div class="focus">
     <div class="lbl">Technical Focus</div>
-    <div class="chips">
-      <span>Distributed Consensus &amp; Replication · Raft</span>
-      <span>Consistency &amp; Concurrency · Linearizability · MVCC</span>
-      <span>Storage Engines · LSM-Tree · Compaction · Caching</span>
-      <span>Backend Reliability &amp; Fault Tolerance</span>
-    </div>
+    <ul>
+      <li><i>i.</i> Distributed consensus &amp; replication — Raft</li>
+      <li><i>ii.</i> Consistency &amp; concurrency — Linearizability, MVCC</li>
+      <li><i>iii.</i> Storage engines — LSM-tree, compaction, caching</li>
+      <li><i>iv.</i> Backend reliability &amp; fault tolerance</li>
+    </ul>
   </div>
 
-  <h3 class="subhead">Engineering Philosophy</h3>
-  <div class="principles">
-    <div class="pr"><b>✅ Correct before fast</b><span>Performance comes after the invariants hold.</span></div>
-    <div class="pr"><b>🔍 Make failure modes explicit</b><span>Design for what happens when things break.</span></div>
-    <div class="pr"><b>🛠 Design for operability</b><span>Real systems get operated — not just the happy path.</span></div>
-    <div class="pr"><b>📈 Benchmark, don't assume</b><span>Measure before calling something "fast enough".</span></div>
+  <div class="subhead">
+    <div class="subhead-lbl">Engineering Philosophy</div>
+    <div class="principles">
+      <div class="pr"><b>Correct before fast</b><span>Performance comes after the invariants hold.</span></div>
+      <div class="pr"><b>Explicit failure modes</b><span>Design for what happens when things break.</span></div>
+      <div class="pr"><b>Built for operability</b><span>Real systems get operated, not just written.</span></div>
+      <div class="pr"><b>Benchmark, don't assume</b><span>Measure before calling anything “fast enough.”</span></div>
+    </div>
   </div>
 </section>
 
 <section id="experience" class="wrap reveal">
-  <div class="head"><span class="no">02</span><h2>Experience</h2><span class="line"></span></div>
+  <div class="shead"><span class="num">02 — EXPERIENCE</span><h2>Where I've worked</h2></div>
   <div class="exp">
     <div class="item">
-      <div class="when">Jun 2026 – Sep 2026 · San Jose, CA</div>
-      <div class="title">Backend Software Engineer Intern</div>
-      <div class="co">Cisco (Splunk)</div>
-      <ul>
-        <li>Designed a <b>disk-based cache management system in C++</b> for a distributed search platform, with size-aware eviction to reclaim storage, prevent disk-full failures, and preserve search availability.</li>
-        <li>Built an <b>incremental in-memory storage tracker</b>, replacing full-directory scans with <b>O(1)</b> disk-usage accounting.</li>
-        <li>Integrated <b>AWS S3</b> with a distributed metadata database to track offloaded artifacts, separating local eviction from cloud deletion to preserve recoverability until TTL expiry.</li>
-        <li>Implemented per-search <b>disk-usage guardrails</b> that terminate oversized in-progress searches before they exhaust local storage.</li>
-      </ul>
+      <div class="when">Jun — Sep 2026<br>San Jose, CA</div>
+      <div>
+        <div class="title">Backend Software Engineer Intern</div>
+        <div class="co">Cisco (Splunk)</div>
+        <ul>
+          <li>Designed a disk-based cache management system in C++ for a distributed search platform, with size-aware eviction to reclaim storage and preserve search availability.</li>
+          <li>Built an incremental in-memory storage tracker, replacing full-directory scans with O(1) disk-usage accounting.</li>
+          <li>Integrated AWS S3 with a distributed metadata database to track offloaded artifacts, preserving recoverability until TTL expiry.</li>
+          <li>Implemented per-search disk-usage guardrails that stop oversized searches before they exhaust local storage.</li>
+        </ul>
+      </div>
     </div>
     <div class="item">
-      <div class="when">Sep 2025 – Dec 2025 · Boston, MA</div>
-      <div class="title">Backend Software Engineer Intern</div>
-      <div class="co">Cisco (Splunk)</div>
-      <ul>
-        <li>Built a <b>cross-node artifact sharing system</b> for Splunk's distributed search platform using <b>C++, AWS S3, and REST APIs</b>, enabling results to persist across Search Head Cluster nodes.</li>
-        <li>Owned end-to-end design and rollout of a <b>remote artifact offloading pipeline</b>, driving production adoption across multiple clusters.</li>
-        <li>Optimized the pipeline with batching and async uploads to enable <b>horizontal scaling</b> — only a <b>0.62%</b> storage-cost increase.</li>
-        <li>Delivered <b>zero-downtime rolling upgrades</b> via backward-compatible storage schemas; built Kubernetes alerting and Splunk dashboards.</li>
-        <li>Wrote a <b>pytest</b> suite covering artifact lifecycle &amp; REST behavior, validated at <b>600K+ daily searches</b> with zero failures, integrated into CI/CD.</li>
-      </ul>
+      <div class="when">Sep — Dec 2025<br>Boston, MA</div>
+      <div>
+        <div class="title">Backend Software Engineer Intern</div>
+        <div class="co">Cisco (Splunk)</div>
+        <ul>
+          <li>Built a cross-node artifact sharing system using C++, AWS S3 and REST APIs, letting results persist across Search Head Cluster nodes.</li>
+          <li>Owned end-to-end design and rollout of a remote artifact offloading pipeline, driving production adoption across clusters.</li>
+          <li>Optimized the pipeline with batching and async uploads to enable horizontal scaling with only a 0.62% storage-cost increase.</li>
+          <li>Delivered zero-downtime rolling upgrades via backward-compatible schemas; built Kubernetes alerting and Splunk dashboards.</li>
+          <li>Wrote a pytest suite validated at 600K+ daily searches with zero failures, integrated into CI/CD.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="projects" class="wrap reveal">
-  <div class="head"><span class="no">03</span><h2>Projects</h2><span class="line"></span></div>
+  <div class="shead"><span class="num">03 — SELECTED WORK</span><h2>Things I've built</h2></div>
   <div class="grid">
     <div class="card">
-      <h3>🗄️ Distributed SQL Database</h3>
+      <h3>Distributed SQL Database</h3>
       <div class="stack"><span class="tag">Rust</span><span class="tag">SQL</span><span class="tag">RocksDB</span><span class="tag">Redis</span></div>
       <ul>
-        <li>Query parser (nom), cost-based optimizer &amp; parallel execution engine — <b>~3× throughput</b> vs single-threaded baseline.</li>
-        <li>Hybrid RocksDB + Redis storage layer reaching <b>~50K QPS</b> for point queries on AWS c5.2xlarge.</li>
-        <li><b>MVCC</b> transactions with snapshot isolation &amp; optimistic concurrency control.</li>
-        <li>Custom <b>LSM-tree</b> engine: memtables, SSTables, leveled compaction, Bloom filters.</li>
+        <li>Query parser (nom), cost-based optimizer &amp; parallel execution — ~3× throughput over a single-threaded baseline.</li>
+        <li>Hybrid RocksDB + Redis storage reaching ~50K QPS for point queries on AWS c5.2xlarge.</li>
+        <li>MVCC transactions with snapshot isolation &amp; optimistic concurrency control.</li>
+        <li>Custom LSM-tree engine: memtables, SSTables, leveled compaction, Bloom filters.</li>
       </ul>
-      <div class="links">
-        <a href="https://github.com/YZhao-prog/SharkDB" target="_blank" rel="noopener">Code ↗</a>
-      </div>
+      <div class="links"><a href="https://github.com/YZhao-prog/SharkDB" target="_blank" rel="noopener">View on GitHub →</a></div>
     </div>
     <div class="card">
-      <h3>🧩 Distributed KV Store w/ Raft</h3>
+      <h3>KV Store with Raft</h3>
       <div class="stack"><span class="tag">Go</span><span class="tag">RPC</span><span class="tag">MapReduce</span></div>
       <ul>
-        <li>Full <b>Raft consensus</b>: leader election, log replication, persistence, snapshotting &amp; crash recovery under partitions.</li>
-        <li><b>Linearizable</b> KV service with request dedup &amp; at-most-once semantics, verified with linearizability testing.</li>
-        <li><b>Sharded</b> store with replicated Shard Controller supporting dynamic migration &amp; rebalancing.</li>
-        <li>Fault-tolerant <b>MapReduce</b> framework with coordinator &amp; distributed workers.</li>
+        <li>Full Raft consensus: leader election, log replication, persistence, snapshotting &amp; crash recovery under partitions.</li>
+        <li>Linearizable KV service with request dedup &amp; at-most-once semantics, verified with linearizability testing.</li>
+        <li>Sharded store with replicated Shard Controller supporting dynamic migration &amp; rebalancing.</li>
+        <li>Fault-tolerant MapReduce framework with coordinator &amp; distributed workers.</li>
       </ul>
-      <div class="links">
-        <a href="https://github.com/YZhao-prog/raft-kv" target="_blank" rel="noopener">Code ↗</a>
-      </div>
+      <div class="links"><a href="https://github.com/YZhao-prog/raft-kv" target="_blank" rel="noopener">View on GitHub →</a></div>
     </div>
     <div class="card">
-      <h3>🎓 New Grad Job Search</h3>
+      <h3>New Grad Job Search</h3>
       <div class="stack"><span class="tag">JavaScript</span><span class="tag">GitHub Pages</span></div>
       <p>A self-updating tool that merges new-grad tech listings from three community repos, ranks
-        big-tech first, and adds salary/posted-date filters — all in one static file.</p>
+        big-tech first, and adds salary &amp; posted-date filters — all in a single static file.</p>
       <div class="links">
-        <a href="https://yzhao-prog.github.io/newgrad-search/" target="_blank" rel="noopener">Live ↗</a>
-        <a href="https://github.com/YZhao-prog/newgrad-search" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://yzhao-prog.github.io/newgrad-search/" target="_blank" rel="noopener">Live →</a>
+        <a href="https://github.com/YZhao-prog/newgrad-search" target="_blank" rel="noopener">Code →</a>
       </div>
     </div>
   </div>
 </section>
 
 <section id="skills" class="wrap reveal">
-  <div class="head"><span class="no">04</span><h2>Skills</h2><span class="line"></span></div>
+  <div class="shead"><span class="num">04 — TOOLKIT</span><h2>Skills</h2></div>
   <div class="skills">
-    <div class="skillrow"><h4>Languages</h4><div class="chips">
-      <span>C++</span><span>Rust</span><span>Go</span><span>Java</span><span>Python</span><span>SQL</span><span>TypeScript</span><span>JavaScript</span><span>HTML/CSS</span></div></div>
-    <div class="skillrow"><h4>Backend</h4><div class="chips">
-      <span>Spring Boot</span><span>Spring Cloud</span><span>Django</span><span>Node.js / Express</span><span>gRPC</span><span>Protocol Buffers</span><span>REST APIs</span></div></div>
-    <div class="skillrow"><h4>Databases &amp; Messaging</h4><div class="chips">
-      <span>MySQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Redis</span><span>RocksDB</span><span>Elasticsearch</span><span>Kafka</span><span>RabbitMQ</span></div></div>
-    <div class="skillrow"><h4>Cloud &amp; Infrastructure</h4><div class="chips">
-      <span>AWS (EC2 · S3 · Lambda · RDS)</span><span>Docker</span><span>Kubernetes</span><span>Helm</span><span>Jenkins</span><span>CI/CD</span><span>Linux</span><span>CMake</span></div></div>
-    <div class="skillrow"><h4>Frontend</h4><div class="chips">
-      <span>React</span><span>Next.js</span><span>Angular</span></div></div>
-    <div class="skillrow"><h4>Observability</h4><div class="chips">
-      <span>Splunk</span><span>OpenTelemetry</span><span>Datadog</span><span>Prometheus</span><span>Grafana</span></div></div>
+    <div class="skillrow"><h4>Languages</h4><p>C++ · Rust · Go · Java · Python · SQL · TypeScript · JavaScript · HTML / CSS</p></div>
+    <div class="skillrow"><h4>Backend</h4><p>Spring Boot · Spring Cloud · Django · Node.js / Express · gRPC · Protocol Buffers · REST APIs</p></div>
+    <div class="skillrow"><h4>Databases &amp; Messaging</h4><p>MySQL · PostgreSQL · MongoDB · Redis · RocksDB · Elasticsearch · Kafka · RabbitMQ</p></div>
+    <div class="skillrow"><h4>Cloud &amp; Infrastructure</h4><p>AWS (EC2 · S3 · Lambda · RDS) · Docker · Kubernetes · Helm · Jenkins · CI/CD · Linux · CMake</p></div>
+    <div class="skillrow"><h4>Frontend</h4><p>React · Next.js · Angular</p></div>
+    <div class="skillrow"><h4>Observability</h4><p>Splunk · OpenTelemetry · Datadog · Prometheus · Grafana</p></div>
   </div>
 </section>
 
 <section id="education" class="wrap reveal">
-  <div class="head"><span class="no">05</span><h2>Education</h2><span class="line"></span></div>
+  <div class="shead"><span class="num">05 — EDUCATION</span><h2>Studies</h2></div>
   <div class="edu">
-    <div class="row"><div>
-      <b>Northeastern University</b> — Boston, MA
-      <div class="deg">M.S. in Information Systems · GPA 3.8 / 4.0</div>
-    </div><div class="when">Sep 2024 – Dec 2026</div></div>
-    <div class="row"><div>
-      <b>The Chinese University of Hong Kong, Shenzhen</b>
-      <div class="deg">B.Eng. in Computer Science &amp; Engineering</div>
-    </div><div class="when">Sep 2020 – Jun 2024</div></div>
-    <div class="row"><div>
-      <b>UC Berkeley</b> — Summer Session
-      <div class="deg">CS 61A: Structure &amp; Interpretation of Computer Programs · GPA 4.0</div>
-    </div><div class="when">May 2022 – Aug 2022</div></div>
+    <div class="row"><div><b>Northeastern University</b><div class="deg">M.S. Information Systems · GPA 3.8 / 4.0 · Boston, MA</div></div><div class="when">Sep 2024 — Dec 2026</div></div>
+    <div class="row"><div><b>CUHK, Shenzhen</b><div class="deg">B.Eng. Computer Science &amp; Engineering</div></div><div class="when">Sep 2020 — Jun 2024</div></div>
+    <div class="row"><div><b>UC Berkeley</b><div class="deg">Summer Session · CS 61A · GPA 4.0</div></div><div class="when">May — Aug 2022</div></div>
   </div>
 </section>
 
-<footer class="wrap">
-  <p>Let's build something reliable together —
-    <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
-  <p style="margin-top:8px;font-size:13px;opacity:.7">© <span id="yr"></span> Yang Zhao · Built with plain HTML/CSS</p>
+<footer>
+  <div class="fk">Let's build something reliable.</div>
+  <a class="mail" href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a>
+  <div class="fsocial">
+    <a href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/YZhao-prog" target="_blank" rel="noopener">GitHub</a>
+    <a href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
+  </div>
+  <div class="cr">© <span id="yr"></span> Yang Zhao</div>
 </footer>
 
 <script>
   const t=document.getElementById('theme'), root=document.documentElement;
   const saved=localStorage.getItem('theme');
-  if(saved==='light'){root.setAttribute('data-theme','light');t.textContent='☀️';}
+  if(saved==='dark'){root.setAttribute('data-theme','dark');t.textContent='☀';}
   t.onclick=()=>{
-    const light=root.getAttribute('data-theme')==='light';
-    if(light){root.removeAttribute('data-theme');t.textContent='🌙';localStorage.setItem('theme','dark');}
-    else{root.setAttribute('data-theme','light');t.textContent='☀️';localStorage.setItem('theme','light');}
+    const dark=root.getAttribute('data-theme')==='dark';
+    if(dark){root.removeAttribute('data-theme');t.textContent='☾';localStorage.setItem('theme','light');}
+    else{root.setAttribute('data-theme','dark');t.textContent='☀';localStorage.setItem('theme','dark');}
   };
   document.getElementById('yr').textContent=new Date().getFullYear();
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.12});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.08});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 </body>
