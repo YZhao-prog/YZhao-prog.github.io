@@ -60,11 +60,11 @@
   .avail{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.05em;
     color:var(--muted);margin-bottom:34px}
   .dot{width:7px;height:7px;border-radius:50%;background:#5a8f5a;box-shadow:0 0 0 4px rgba(90,143,90,.15)}
-  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,8vw,84px);line-height:1;
-    letter-spacing:-.015em;margin:14px 0 0}
-  .hero .sig{font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.2em;
-    color:var(--muted);margin-top:20px}
-  .hero .sig b{color:var(--text);font-weight:600}
+  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,7vw,68px);line-height:1.05;
+    letter-spacing:-.01em;margin:0}
+  .hero .wave{display:inline-block;transform-origin:70% 70%;animation:wave 2.4s ease-in-out infinite}
+  @keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}40%{transform:rotate(10deg)}50%{transform:rotate(-4deg)}}
+  .hero .sig{font-size:15px;font-weight:400;color:var(--muted);margin-top:16px}
   .intro{margin-top:26px;max-width:560px;color:var(--muted);font-size:16px;font-weight:300}
   .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
   .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;font-size:11px;font-weight:600;
@@ -178,11 +178,11 @@
 
 <header class="hero wrap">
   <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available January 2027</div>
-  <div class="kicker">Software Engineer</div>
-  <h1>Building reliable,<br>well-crafted software.</h1>
-  <p class="sig"><b>Yang Zhao</b> · Software Engineer</p>
-  <p class="intro">M.S. Information Systems at Northeastern (Dec 2026), with software engineering
-    internship experience at Cisco (Splunk). I work across the stack, with a soft spot for backend.</p>
+  <h1>Hi, I'm Yang <span class="wave">👋</span></h1>
+  <p class="sig">Software Engineer · M.S. student at Northeastern University</p>
+  <p class="intro">Graduating December 2026, with software engineering internship experience at
+    Cisco (Splunk). I work across the stack, with a soft spot for backend. Currently looking for
+    new-grad software engineering roles.</p>
   <div class="cta">
     <a class="btn primary" href="mailto:yangzhao200124@gmail.com">Get in touch</a>
     <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
