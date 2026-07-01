@@ -59,11 +59,11 @@
   .avail{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.05em;
     color:var(--muted);margin-bottom:34px}
   .dot{width:7px;height:7px;border-radius:50%;background:#5a8f5a;box-shadow:0 0 0 4px rgba(90,143,90,.15)}
-  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(64px,13vw,132px);line-height:.92;
-    letter-spacing:-.02em;margin:18px 0 0}
-  .hero .lede{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(22px,4vw,32px);
-    color:var(--muted);margin-top:26px;letter-spacing:.01em}
-  .intro{margin-top:30px;max-width:600px;color:var(--muted);font-size:16px;font-weight:300}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,8vw,84px);line-height:1;
+    letter-spacing:-.015em;margin:14px 0 0}
+  .hero .sig{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(18px,3vw,24px);
+    color:var(--muted);margin-top:22px;letter-spacing:.01em}
+  .intro{margin-top:26px;max-width:560px;color:var(--muted);font-size:16px;font-weight:300}
   .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
   .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;font-size:11px;font-weight:600;
     text-transform:uppercase;letter-spacing:.16em;border-radius:2px;transition:all .28s;border:1px solid var(--text)}
@@ -177,11 +177,10 @@
 <header class="hero wrap">
   <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available January 2027</div>
   <div class="kicker">Backend Software Engineer</div>
-  <h1>Yang<br>Zhao</h1>
-  <p class="lede">Distributed systems, storage &amp; infrastructure.</p>
-  <p class="intro">M.S. in Information Systems at Northeastern University, graduating December 2026.
-    I'm a backend engineer with software engineering internship experience at Cisco (Splunk),
-    and I enjoy working on distributed systems and infrastructure.</p>
+  <h1>Building reliable<br>distributed systems.</h1>
+  <p class="sig">Yang Zhao · Distributed Systems &amp; Infrastructure</p>
+  <p class="intro">M.S. Information Systems at Northeastern (Dec 2026), with software engineering
+    internship experience at Cisco (Splunk).</p>
   <div class="cta">
     <a class="btn primary" href="mailto:yangzhao200124@gmail.com">Get in touch</a>
     <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
@@ -194,10 +193,9 @@
   <div class="shead"><span class="num">01 — ABOUT</span><h2>Profile</h2></div>
   <p class="lead">I'm a backend software engineer focused on distributed systems and infrastructure —
     drawn to the parts of a system that have to stay correct under pressure.</p>
-  <p class="body" style="margin-top:22px">I've completed software engineering internships at Cisco (Splunk),
-    working on their distributed search platform, and I enjoy building systems from the ground up to
-    understand how they really work. I'm finishing my M.S. in Information Systems at Northeastern University
-    (GPA 3.8), building on a CS degree from CUHK-Shenzhen.</p>
+  <p class="body" style="margin-top:22px">I've interned at Cisco (Splunk) on their distributed search
+    platform, and I like building systems from the ground up to understand how they really work. Currently
+    finishing my M.S. at Northeastern (GPA 3.8), after a CS degree from CUHK-Shenzhen.</p>
 
   <div class="focus">
     <div class="lbl">Technical Focus</div>
@@ -207,16 +205,6 @@
       <li><i>iii.</i> Storage engines — LSM-tree, compaction, caching</li>
       <li><i>iv.</i> Backend reliability &amp; fault tolerance</li>
     </ul>
-  </div>
-
-  <div class="subhead">
-    <div class="subhead-lbl">Engineering Philosophy</div>
-    <div class="principles">
-      <div class="pr"><b>Correct before fast</b><span>Performance comes after the invariants hold.</span></div>
-      <div class="pr"><b>Explicit failure modes</b><span>Design for what happens when things break.</span></div>
-      <div class="pr"><b>Built for operability</b><span>Real systems get operated, not just written.</span></div>
-      <div class="pr"><b>Benchmark, don't assume</b><span>Measure before calling anything “fast enough.”</span></div>
-    </div>
   </div>
 </section>
 
@@ -229,10 +217,9 @@
         <div class="title">Backend Software Engineer Intern</div>
         <div class="co">Cisco (Splunk)</div>
         <ul>
-          <li>Designed a disk-based cache management system in C++ for a distributed search platform, with size-aware eviction to reclaim storage and preserve search availability.</li>
-          <li>Built an incremental in-memory storage tracker, replacing full-directory scans with O(1) disk-usage accounting.</li>
-          <li>Integrated AWS S3 with a distributed metadata database to track offloaded artifacts, preserving recoverability until TTL expiry.</li>
-          <li>Implemented per-search disk-usage guardrails that stop oversized searches before they exhaust local storage.</li>
+          <li>Designed a disk-based cache management system in C++ with size-aware eviction to reclaim storage and preserve search availability.</li>
+          <li>Built an incremental storage tracker, replacing full-directory scans with O(1) disk-usage accounting.</li>
+          <li>Integrated AWS S3 with a distributed metadata database to track offloaded artifacts and preserve recoverability.</li>
         </ul>
       </div>
     </div>
@@ -242,11 +229,9 @@
         <div class="title">Backend Software Engineer Intern</div>
         <div class="co">Cisco (Splunk)</div>
         <ul>
-          <li>Built a cross-node artifact sharing system using C++, AWS S3 and REST APIs, letting results persist across Search Head Cluster nodes.</li>
-          <li>Owned end-to-end design and rollout of a remote artifact offloading pipeline, driving production adoption across clusters.</li>
-          <li>Optimized the pipeline with batching and async uploads to enable horizontal scaling with only a 0.62% storage-cost increase.</li>
-          <li>Delivered zero-downtime rolling upgrades via backward-compatible schemas; built Kubernetes alerting and Splunk dashboards.</li>
-          <li>Wrote a pytest suite validated at 600K+ daily searches with zero failures, integrated into CI/CD.</li>
+          <li>Built a cross-node artifact sharing system (C++, AWS S3, REST) so results persist across Search Head Cluster nodes.</li>
+          <li>Designed and rolled out a remote artifact offloading pipeline into production; horizontal scaling with only a 0.62% storage-cost increase.</li>
+          <li>Delivered zero-downtime rolling upgrades; wrote a pytest suite validated at 600K+ daily searches with zero failures.</li>
         </ul>
       </div>
     </div>
