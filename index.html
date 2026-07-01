@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yang Zhao — Backend Software Engineer</title>
+<meta name="description" content="Yang Zhao — Backend Software Engineer specializing in distributed systems, storage engines, and cloud infrastructure. MS Information Systems @ Northeastern. Seeking New Grad SWE roles.">
+<meta property="og:title" content="Yang Zhao — Backend Software Engineer">
+<meta property="og:description" content="Distributed systems & backend engineer. C++, Rust, Go. Ex-Cisco (Splunk). Seeking New Grad SWE roles.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
+<style>
+  :root{
+    --bg:#0b0f17; --bg2:#0f1522; --panel:#141b2b; --border:#243049;
+    --text:#e8edf6; --muted:#94a3b8; --accent:#5b8cff; --accent2:#7c5cff;
+    --chip:#1b2436; --shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+  [data-theme="light"]{
+    --bg:#f6f8fc; --bg2:#eef2f9; --panel:#ffffff; --border:#e2e8f2;
+    --text:#0f1a2e; --muted:#5b6b85; --accent:#2f6bff; --accent2:#6b46ff;
+    --chip:#eef2fb; --shadow:0 10px 30px rgba(20,40,90,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px}
+  section{padding:64px 0;scroll-margin-top:70px}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .nav-in{max-width:940px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:20px}
+  .brand{font-weight:700;letter-spacing:.3px;margin-right:auto}
+  .brand span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .nav-links{display:flex;gap:20px}
+  .nav-links a{color:var(--muted);font-size:14px;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .icon-btn{background:var(--chip);border:1px solid var(--border);color:var(--text);width:34px;height:34px;
+    border-radius:9px;cursor:pointer;font-size:15px;display:grid;place-items:center}
+  @media(max-width:640px){.nav-links{display:none}}
+
+  /* hero */
+  .hero{padding-top:70px;text-align:left}
+  .avail{display:inline-flex;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--border);
+    color:var(--muted);font-size:13px;padding:6px 13px;border-radius:999px;margin-bottom:22px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+  .hero h1{font-size:clamp(38px,7vw,62px);line-height:1.05;letter-spacing:-1.5px;font-weight:800}
+  .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .role{font-size:clamp(18px,3vw,23px);color:var(--muted);margin-top:14px;font-weight:500}
+  .intro{margin-top:20px;max-width:640px;color:var(--muted);font-size:16.5px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;font-size:14.5px;
+    font-weight:600;border:1px solid var(--border);transition:transform .15s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;box-shadow:var(--shadow)}
+  .btn.ghost{background:var(--panel);color:var(--text)}
+
+  /* section heads */
+  .head{display:flex;align-items:baseline;gap:14px;margin-bottom:34px}
+  .head h2{font-size:26px;letter-spacing:-.5px}
+  .head .no{font-family:ui-monospace,monospace;color:var(--accent);font-size:14px;font-weight:600}
+  .head .line{flex:1;height:1px;background:var(--border)}
+
+  /* experience timeline */
+  .exp{position:relative;padding-left:26px;border-left:2px solid var(--border)}
+  .exp .item{position:relative;padding-bottom:38px}
+  .exp .item:last-child{padding-bottom:0}
+  .exp .item::before{content:"";position:absolute;left:-33px;top:6px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+  .exp .when{font-family:ui-monospace,monospace;font-size:12.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+  .exp .title{font-size:18px;font-weight:700;margin-top:4px}
+  .exp .co{color:var(--muted);font-size:14.5px;margin-top:2px}
+  .exp ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
+  .exp li{margin-bottom:7px}
+  .exp li b{color:var(--text);font-weight:600}
+
+  /* project cards */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;
+    transition:transform .18s,border-color .2s;box-shadow:var(--shadow)}
+  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .card h3{font-size:18px;display:flex;align-items:center;gap:9px}
+  .card .stack{margin:10px 0 12px;display:flex;flex-wrap:wrap;gap:6px}
+  .card p{color:var(--muted);font-size:14.5px}
+  .card ul{margin:8px 0 0;padding-left:17px;color:var(--muted);font-size:14px}
+  .card li{margin-bottom:5px}
+  .tag{font-size:11.5px;padding:3px 9px;border-radius:999px;background:var(--chip);border:1px solid var(--border);color:var(--muted)}
+  .card .links{margin-top:14px;display:flex;gap:14px}
+  .card .links a{font-size:13.5px;color:var(--accent);font-weight:600}
+
+  /* skills */
+  .skills{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.skills{grid-template-columns:1fr}}
+  .skillrow{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+  .skillrow h4{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chips span{font-size:13px;padding:5px 11px;border-radius:8px;background:var(--chip);border:1px solid var(--border)}
+
+  /* education */
+  .edu{display:flex;flex-direction:column;gap:14px}
+  .edu .row{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .edu .row .deg{color:var(--muted);font-size:14.5px;margin-top:3px}
+  .edu .when{font-family:ui-monospace,monospace;font-size:13px;color:var(--accent);white-space:nowrap}
+  .edu b{font-size:16.5px}
+
+  footer{border-top:1px solid var(--border);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
+  footer a{color:var(--accent);font-weight:600}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="brand"><span>Yang Zhao</span></div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+    </div>
+    <button class="icon-btn" id="theme" title="Toggle theme">🌙</button>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available Jan 2027</div>
+  <h1>Hi, I'm <span>Yang Zhao</span>.<br>I build reliable<br>distributed backends.</h1>
+  <p class="role">Backend Software Engineer · Distributed Systems &amp; Storage</p>
+  <p class="intro">MS in Information Systems at Northeastern University, graduating Dec 2026. I design
+    high-throughput backend systems in <b>C++, Rust, and Go</b> — from disk-based cache managers and
+    artifact-offloading pipelines at <b>Cisco (Splunk)</b> to distributed databases and consensus
+    protocols from scratch.</p>
+  <div class="cta">
+    <a class="btn primary" href="mailto:yangzhao200124@gmail.com">✉️ Email me</a>
+    <a class="btn ghost" href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">in LinkedIn</a>
+    <a class="btn ghost" href="https://github.com/YZhao-prog" target="_blank" rel="noopener">⌥ GitHub</a>
+    <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">📄 Resume</a>
+  </div>
+</header>
+
+<section id="about" class="wrap reveal">
+  <div class="head"><span class="no">01</span><h2>About</h2><span class="line"></span></div>
+  <p style="color:var(--muted);font-size:16.5px;max-width:720px">
+    I'm a systems-focused backend engineer who enjoys the hard parts of infrastructure: storage engines,
+    caching, consensus, and keeping large distributed clusters stable under heavy load. At Cisco (Splunk)
+    I worked on the distributed search platform — building cross-node artifact sharing, S3-backed offloading,
+    and disk-usage guardrails that were validated at <b style="color:var(--text)">600K+ daily searches with zero failures</b>.
+    Outside of work I build databases from the ground up in Rust and Go to understand systems deeply.
+    I hold a 3.8 GPA at Northeastern and a CS degree from CUHK-Shenzhen.
+  </p>
+</section>
+
+<section id="experience" class="wrap reveal">
+  <div class="head"><span class="no">02</span><h2>Experience</h2><span class="line"></span></div>
+  <div class="exp">
+    <div class="item">
+      <div class="when">Jun 2026 – Sep 2026 · San Jose, CA</div>
+      <div class="title">Backend Software Engineer Intern</div>
+      <div class="co">Cisco (Splunk)</div>
+      <ul>
+        <li>Designed a <b>disk-based cache management system in C++</b> for a distributed search platform, with size-aware eviction to reclaim storage, prevent disk-full failures, and preserve search availability.</li>
+        <li>Built an <b>incremental in-memory storage tracker</b>, replacing full-directory scans with <b>O(1)</b> disk-usage accounting.</li>
+        <li>Integrated <b>AWS S3</b> with a distributed metadata database to track offloaded artifacts, separating local eviction from cloud deletion to preserve recoverability until TTL expiry.</li>
+        <li>Implemented per-search <b>disk-usage guardrails</b> that terminate oversized in-progress searches before they exhaust local storage.</li>
+      </ul>
+    </div>
+    <div class="item">
+      <div class="when">Sep 2025 – Dec 2025 · Boston, MA</div>
+      <div class="title">Backend Software Engineer Intern</div>
+      <div class="co">Cisco (Splunk)</div>
+      <ul>
+        <li>Built a <b>cross-node artifact sharing system</b> for Splunk's distributed search platform using <b>C++, AWS S3, and REST APIs</b>, enabling results to persist across Search Head Cluster nodes.</li>
+        <li>Owned end-to-end design and rollout of a <b>remote artifact offloading pipeline</b>, driving production adoption across multiple clusters.</li>
+        <li>Optimized the pipeline with batching and async uploads to enable <b>horizontal scaling</b> — only a <b>0.62%</b> storage-cost increase.</li>
+        <li>Delivered <b>zero-downtime rolling upgrades</b> via backward-compatible storage schemas; built Kubernetes alerting and Splunk dashboards.</li>
+        <li>Wrote a <b>pytest</b> suite covering artifact lifecycle &amp; REST behavior, validated at <b>600K+ daily searches</b> with zero failures, integrated into CI/CD.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="wrap reveal">
+  <div class="head"><span class="no">03</span><h2>Projects</h2><span class="line"></span></div>
+  <div class="grid">
+    <div class="card">
+      <h3>🗄️ Distributed SQL Database</h3>
+      <div class="stack"><span class="tag">Rust</span><span class="tag">SQL</span><span class="tag">RocksDB</span><span class="tag">Redis</span></div>
+      <ul>
+        <li>Query parser (nom), cost-based optimizer &amp; parallel execution engine — <b>~3× throughput</b> vs single-threaded baseline.</li>
+        <li>Hybrid RocksDB + Redis storage layer reaching <b>~50K QPS</b> for point queries on AWS c5.2xlarge.</li>
+        <li><b>MVCC</b> transactions with snapshot isolation &amp; optimistic concurrency control.</li>
+        <li>Custom <b>LSM-tree</b> engine: memtables, SSTables, leveled compaction, Bloom filters.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🧩 Distributed KV Store w/ Raft</h3>
+      <div class="stack"><span class="tag">Go</span><span class="tag">RPC</span><span class="tag">MapReduce</span></div>
+      <ul>
+        <li>Full <b>Raft consensus</b>: leader election, log replication, persistence, snapshotting &amp; crash recovery under partitions.</li>
+        <li><b>Linearizable</b> KV service with request dedup &amp; at-most-once semantics, verified with linearizability testing.</li>
+        <li><b>Sharded</b> store with replicated Shard Controller supporting dynamic migration &amp; rebalancing.</li>
+        <li>Fault-tolerant <b>MapReduce</b> framework with coordinator &amp; distributed workers.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🎓 New Grad Job Search</h3>
+      <div class="stack"><span class="tag">JavaScript</span><span class="tag">GitHub Pages</span></div>
+      <p>A self-updating tool that merges new-grad tech listings from three community repos, ranks
+        big-tech first, and adds salary/posted-date filters — all in one static file.</p>
+      <div class="links">
+        <a href="https://yzhao-prog.github.io/newgrad-search/" target="_blank" rel="noopener">Live ↗</a>
+        <a href="https://github.com/YZhao-prog/newgrad-search" target="_blank" rel="noopener">Code ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="wrap reveal">
+  <div class="head"><span class="no">04</span><h2>Skills</h2><span class="line"></span></div>
+  <div class="skills">
+    <div class="skillrow"><h4>Languages</h4><div class="chips">
+      <span>C++</span><span>Rust</span><span>Go</span><span>Java</span><span>Python</span><span>SQL</span><span>TypeScript</span><span>JavaScript</span><span>HTML/CSS</span></div></div>
+    <div class="skillrow"><h4>Backend</h4><div class="chips">
+      <span>Spring Boot</span><span>Spring Cloud</span><span>Django</span><span>Node.js / Express</span><span>gRPC</span><span>Protocol Buffers</span><span>REST APIs</span></div></div>
+    <div class="skillrow"><h4>Databases &amp; Messaging</h4><div class="chips">
+      <span>MySQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Redis</span><span>RocksDB</span><span>Elasticsearch</span><span>Kafka</span><span>RabbitMQ</span></div></div>
+    <div class="skillrow"><h4>Cloud &amp; Infrastructure</h4><div class="chips">
+      <span>AWS (EC2 · S3 · Lambda · RDS)</span><span>Docker</span><span>Kubernetes</span><span>Helm</span><span>Jenkins</span><span>CI/CD</span><span>Linux</span><span>CMake</span></div></div>
+    <div class="skillrow"><h4>Frontend</h4><div class="chips">
+      <span>React</span><span>Next.js</span><span>Angular</span></div></div>
+    <div class="skillrow"><h4>Observability</h4><div class="chips">
+      <span>Splunk</span><span>OpenTelemetry</span><span>Datadog</span><span>Prometheus</span><span>Grafana</span></div></div>
+  </div>
+</section>
+
+<section id="education" class="wrap reveal">
+  <div class="head"><span class="no">05</span><h2>Education</h2><span class="line"></span></div>
+  <div class="edu">
+    <div class="row"><div>
+      <b>Northeastern University</b> — Boston, MA
+      <div class="deg">M.S. in Information Systems · GPA 3.8 / 4.0</div>
+    </div><div class="when">Sep 2024 – Dec 2026</div></div>
+    <div class="row"><div>
+      <b>The Chinese University of Hong Kong, Shenzhen</b>
+      <div class="deg">B.Eng. in Computer Science &amp; Engineering</div>
+    </div><div class="when">Sep 2020 – Jun 2024</div></div>
+    <div class="row"><div>
+      <b>UC Berkeley</b> — Summer Session
+      <div class="deg">CS 61A: Structure &amp; Interpretation of Computer Programs · GPA 4.0</div>
+    </div><div class="when">May 2022 – Aug 2022</div></div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>Let's build something reliable together —
+    <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
+  <p style="margin-top:8px;font-size:13px;opacity:.7">© <span id="yr"></span> Yang Zhao · Built with plain HTML/CSS</p>
+</footer>
+
+<script>
+  const t=document.getElementById('theme'), root=document.documentElement;
+  const saved=localStorage.getItem('theme');
+  if(saved==='light'){root.setAttribute('data-theme','light');t.textContent='☀️';}
+  t.onclick=()=>{
+    const light=root.getAttribute('data-theme')==='light';
+    if(light){root.removeAttribute('data-theme');t.textContent='🌙';localStorage.setItem('theme','dark');}
+    else{root.setAttribute('data-theme','light');t.textContent='☀️';localStorage.setItem('theme','light');}
+  };
+  document.getElementById('yr').textContent=new Date().getFullYear();
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
