@@ -38,7 +38,8 @@
   nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);
     backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
   .nav-in{max-width:860px;margin:0 auto;padding:18px 30px;display:flex;align-items:center;gap:26px}
-  .monogram{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.04em;margin-right:auto}
+  .monogram{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:.08em;margin-right:auto;
+    border:1px solid var(--border);border-radius:50%;width:44px;height:44px;display:grid;place-items:center}
   .nav-links{display:flex;gap:30px}
   .nav-links a{color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase;
     letter-spacing:.18em;transition:color .25s;position:relative}
@@ -61,8 +62,9 @@
   .dot{width:7px;height:7px;border-radius:50%;background:#5a8f5a;box-shadow:0 0 0 4px rgba(90,143,90,.15)}
   .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,8vw,84px);line-height:1;
     letter-spacing:-.015em;margin:14px 0 0}
-  .hero .sig{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(18px,3vw,24px);
-    color:var(--muted);margin-top:22px;letter-spacing:.01em}
+  .hero .sig{font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.2em;
+    color:var(--muted);margin-top:20px}
+  .hero .sig b{color:var(--text);font-weight:600}
   .intro{margin-top:26px;max-width:560px;color:var(--muted);font-size:16px;font-weight:300}
   .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
   .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;font-size:11px;font-weight:600;
@@ -162,7 +164,7 @@
 
 <nav>
   <div class="nav-in">
-    <div class="monogram">Yang Zhao</div>
+    <a class="monogram" href="#" title="Yang Zhao">YZ</a>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
@@ -178,7 +180,7 @@
   <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available January 2027</div>
   <div class="kicker">Backend Software Engineer</div>
   <h1>Building reliable<br>distributed systems.</h1>
-  <p class="sig">Yang Zhao · Distributed Systems &amp; Infrastructure</p>
+  <p class="sig"><b>Yang Zhao</b> · Distributed Systems &amp; Infrastructure</p>
   <p class="intro">M.S. Information Systems at Northeastern (Dec 2026), with software engineering
     internship experience at Cisco (Splunk).</p>
   <div class="cta">
