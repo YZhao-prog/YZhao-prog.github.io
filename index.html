@@ -243,13 +243,13 @@
   <div class="shead"><span class="num">03 — SELECTED WORK</span><h2>Things I've built</h2></div>
   <div class="grid">
     <div class="card">
-      <h3>Distributed SQL Database</h3>
-      <div class="stack"><span class="tag">Rust</span><span class="tag">SQL</span><span class="tag">RocksDB</span><span class="tag">Redis</span></div>
+      <h3>SharkDB — SQL Database Engine</h3>
+      <div class="stack"><span class="tag">Rust</span><span class="tag">SQL</span><span class="tag">LSM-tree</span><span class="tag">MVCC</span></div>
       <ul>
-        <li>Query parser (nom), cost-based optimizer &amp; parallel execution — ~3× throughput over a single-threaded baseline.</li>
-        <li>Hybrid RocksDB + Redis storage reaching ~50K QPS for point queries on AWS c5.2xlarge.</li>
-        <li>MVCC transactions with snapshot isolation &amp; optimistic concurrency control.</li>
-        <li>Custom LSM-tree engine: memtables, SSTables, leveled compaction, Bloom filters.</li>
+        <li>Hand-written parser, rule-based optimizer (predicate pushdown, PK point-lookup rewriting, hash-join selection) &amp; parallel execution — ~2× on 200K-row analytical queries.</li>
+        <li>Three interchangeable storage engines (in-memory, Bitcask-style log, LSM-tree) behind one trait — ~500K QPS storage point reads, ~200K QPS end-to-end SQL point lookups.</li>
+        <li>MVCC transactions with snapshot isolation &amp; optimistic concurrency control, verified against dirty / non-repeatable / phantom reads.</li>
+        <li>Custom LSM-tree engine: WAL + memtables, SSTables with Bloom filters, leveled compaction — crash recovery ~16× faster than full-log replay.</li>
       </ul>
       <div class="links"><a href="https://github.com/YZhao-prog/SharkDB" target="_blank" rel="noopener">View on GitHub →</a></div>
     </div>
