@@ -220,7 +220,8 @@
         <ul>
           <li>Designed a disk-based cache management system in C++ with size-aware eviction to reclaim storage and preserve search availability.</li>
           <li>Built an incremental storage tracker, replacing full-directory scans with O(1) disk-usage accounting.</li>
-          <li>Integrated AWS S3 with a distributed metadata database to track offloaded artifacts and preserve recoverability.</li>
+          <li>Engineered an artifact offloading pipeline across concurrent workers, AWS S3, and a PostgreSQL-backed KV store, sustaining 500 concurrent offloads with zero metadata inconsistencies or duplicate uploads.</li>
+          <li>Implemented per-search disk-usage guardrails that terminate oversized searches, preventing a single runaway search from destabilizing the cluster.</li>
         </ul>
       </div>
     </div>
@@ -231,8 +232,9 @@
         <div class="co">Splunk</div>
         <ul>
           <li>Built a cross-node artifact sharing system (C++, AWS S3, REST) so results persist across Search Head Cluster nodes.</li>
-          <li>Designed and rolled out a remote artifact offloading pipeline into production; horizontal scaling with only a 0.62% storage-cost increase.</li>
-          <li>Delivered zero-downtime rolling upgrades; wrote a pytest suite validated at 600K+ daily searches with zero failures.</li>
+          <li>Drove a feature-flagged rollout of remote artifact storage from internal clusters through customer canary to the full production fleet, with only a 0.62% storage-cost increase.</li>
+          <li>Delivered zero-downtime rolling upgrades by designing a backward-compatible storage schema.</li>
+          <li>Built a pytest suite for CI/CD regression coverage and load-tested the feature at a production scale of 600K+ daily searches with zero failures.</li>
         </ul>
       </div>
     </div>
