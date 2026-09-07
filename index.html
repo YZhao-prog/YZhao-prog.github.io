@@ -1,197 +1,173 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>~yzhao</title>
-<meta name="description" content="Yang Zhao — backend and storage systems engineer. M.S. Northeastern (Dec 2026), two backend internships at Splunk, author of SharkDB. Seeking new-grad software engineering roles from January 2027.">
-<meta property="og:title" content="~yzhao">
-<meta property="og:description" content="Backend and storage systems engineer. Splunk intern ×2, SharkDB author, M.S. Northeastern Dec 2026.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23fafafa'/><text x='50' y='68' text-anchor='middle' font-size='54' font-family='Menlo,monospace' font-weight='700' fill='%232e3338'>~y</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    color-scheme: light;
-    --bg: #fafafa;
-    --fg: #2e3338;
-    --dim: #6e767d;
-    --border: #d0d7de;
-    --accent: #3b5bcc;
-    --code-bg: #eef0f2;
-    /* CRT overlay tuning — strength of the texture layer over the terminal. */
-    --crt-scan: rgba(0, 0, 0, 0.03);
-    --crt-vignette: rgba(0, 0, 0, 0.13);
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23fafafa'/><text x='50' y='68' text-anchor='middle' font-size='54' font-family='Menlo,monospace' font-weight='700' fill='%232e3338'>~y</text></svg>" />
+  <title>~yzhao</title>
+  <meta name="description" content="Yang Zhao — backend and storage systems engineer. M.S. Northeastern (Dec 2026), two backend internships at Splunk, author of SharkDB. Seeking new-grad software engineering roles from January 2027." />
+  <meta property="og:title" content="~yzhao" />
+  <meta property="og:description" content="Backend and storage systems engineer. Splunk intern ×2, SharkDB author, M.S. Northeastern Dec 2026." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fafafa;
+      --fg: #2e3338;
+      --border: #d0d7de;
+      /* CRT overlay tuning — strength of the texture layer over the terminal. */
+      --crt-scan: rgba(0, 0, 0, 0.03);
+      --crt-vignette: rgba(0, 0, 0, 0.13);
+    }
 
-  * { box-sizing: border-box; }
+    @font-face {
+      font-family: "Maple Mono";
+      src: url("fonts/MapleMono-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Maple Mono";
+      src: url("fonts/MapleMono-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Maple Mono";
+      src: url("fonts/MapleMono-Italic.woff2") format("woff2");
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Maple Mono";
+      src: url("fonts/MapleMono-BoldItalic.woff2") format("woff2");
+      font-weight: 700;
+      font-style: italic;
+      font-display: swap;
+    }
 
-  /* Zero-size SVG that only hosts <defs> (the smudge filter). Kept out of layout. */
-  .defs-only { position: absolute; width: 0; height: 0; overflow: hidden; }
+    * { box-sizing: border-box; }
 
-  html, body {
-    margin: 0;
-    height: 100%;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "JetBrains Mono", "Maple Mono", "Fira Code", "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
+    /* Zero-size SVG that only hosts <defs> (the smudge filter). Kept out of layout. */
+    .defs-only { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-  #app {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 12px;
-  }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Maple Mono", "Fira Code", "JetBrains Mono", "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+    }
 
-  /* The terminal frame. Capped at ~80 columns; the padding lives here and the
-     content scrolls inside it, like a real terminal window. */
-  #term-host {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
-    padding: 16px 18px 28px 18px;
-    overflow: hidden;
-    max-width: calc(80ch + 38px);
-    transition: opacity 150ms ease-out;
-  }
-  /* Hidden until web fonts have loaded, then faded in, so the fallback-font
-     reflow never flashes. Only when JS is present; without it, just render. */
-  html.js #term-host { opacity: 0; }
-  html.js #term-host.ready { opacity: 1; }
-  /* With JS, the files are printed on demand (click a link or type a command);
-     without it they are simply shown, so the page reads in full either way. */
-  html.js #archive { display: none; }
+    #app {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+    }
 
-  #term-screen {
-    height: 100%;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-    scrollbar-color: #c0c7cf transparent;
-  }
-  /* The smudge filter goes on the content, not the scroll container, so
-     scrolling does not force the filter to re-run over the whole viewport. */
-  #scrollback, #prompt { filter: url(#crt-smudge); }
-  #term-screen::-webkit-scrollbar { width: 10px; }
-  #term-screen::-webkit-scrollbar-track { background: transparent; }
-  #term-screen::-webkit-scrollbar-thumb { background: #c0c7cf; border-radius: 5px; }
-  #term-screen::-webkit-scrollbar-thumb:hover { background: #a8afb7; }
+    #term-host {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      /* Spacing between the terminal content and the rounded frame; extra bottom
+         padding also absorbs sub-pixel row overflow so the last line isn't
+         clipped by overflow:hidden. */
+      padding: 16px 18px 28px 18px;
+      overflow: hidden;
+      /* Cap at ~80 columns. Padding lives on this outer frame; xterm mounts in
+         the padding-free #term-screen below, so FitAddon measures only the
+         content width (80ch). */
+      max-width: calc(80ch + 38px);
+      /* Hidden until the terminal has been fit at final (post-font-load)
+         metrics, then faded in — masks the pre-JS full-width frame and the
+         web-font swap reflow that would otherwise flash on load. */
+      opacity: 0;
+      transition: opacity 150ms ease-out;
+    }
+    #term-host.ready { opacity: 1; }
 
-  /* CRT overlay — a pure visual layer above the terminal. pointer-events:none
-     keeps clicks and selection reaching the content. */
-  #term-host::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 10;
-    background: repeating-linear-gradient(to bottom, var(--crt-scan) 0 1px, transparent 1px 3px);
-    mix-blend-mode: multiply;
-  }
-  #term-host::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 11;
-    background: radial-gradient(ellipse 120% 120% at 50% 50%, transparent 55%, var(--crt-vignette) 100%);
-  }
+    /* xterm mount point — padding-free so its measured width is exactly the
+       terminal area. The smudge filter is applied here, to the actual terminal
+       pixels (foreground text). */
+    #term-screen {
+      height: 100%;
+      filter: url(#crt-smudge);
+    }
+    #term-screen .xterm { height: 100%; }
 
-  /* ---- markdown-in-a-terminal ---- */
-  p, pre, ul { margin: 0; }
-  a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
-  a:hover { color: var(--accent); }
-  a:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
-  b { font-weight: 700; }
-  i { font-style: italic; }
-  code { background: var(--code-bg); padding: 0 .3ch; border-radius: 2px; }
+    /* Enable OpenType ligatures consistently across browsers. Maple Mono's
+       ligatures are width-stable, so they don't break xterm's cell alignment. */
+    #term-screen .xterm-rows,
+    #term-screen .xterm-rows span {
+      font-feature-settings: "liga" 1, "calt" 1;
+    }
 
-  .h1 { color: var(--accent); font-weight: 700; margin-bottom: 1.5em; }
-  .h1 a { color: var(--accent); }
-  .h2 { color: var(--accent); font-weight: 700; margin: 0 0 .75em; }
-  .banner {
-    font-family: inherit;
-    font-size: 14px;
-    line-height: 1.15;
-    white-space: pre;
-    margin: 0 0 1.5em;
-    overflow-x: auto;
-  }
-  .quote {
-    border-left: 1px solid var(--fg);
-    padding-left: 2ch;
-    margin: 1.5em 0;
-  }
-  .dim { color: var(--dim); }
-  .blank { height: 1.5em; }
+    /* CRT overlay — a pure visual layer above the terminal. pointer-events:none
+       keeps input and selection reaching xterm. */
+    #term-host::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 10;
+      /* Scanlines: the CRT phosphor mask. */
+      background: repeating-linear-gradient(to bottom, var(--crt-scan) 0 1px, transparent 1px 3px);
+      mix-blend-mode: multiply;
+    }
+    #term-host::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 11;
+      /* Vignette: edges fall off, reading as curved glass depth without warping. */
+      background: radial-gradient(ellipse 120% 120% at 50% 50%, transparent 55%, var(--crt-vignette) 100%);
+    }
 
-  /* lists print the way markdown does in a terminal */
-  ul { list-style: none; padding-left: 4ch; }
-  li { position: relative; margin: 0 0 .35em; }
-  li::before { content: "•"; position: absolute; left: -2ch; }
-  ul.tight li { margin: 0; }
+    /* Visible scrollbars on the light theme (xterm's default thumb vanishes on white). */
+    .xterm-viewport {
+      scrollbar-width: thin;
+      scrollbar-color: #c0c7cf transparent;
+    }
+    .xterm-viewport::-webkit-scrollbar { width: 10px; }
+    .xterm-viewport::-webkit-scrollbar-track { background: transparent; }
+    .xterm-viewport::-webkit-scrollbar-thumb { background: #c0c7cf; border-radius: 5px; }
+    .xterm-viewport::-webkit-scrollbar-thumb:hover { background: #a8afb7; }
 
-  /* one "entry" = a command line followed by its output */
-  .entry { margin-bottom: 1.5em; }
-  .cmd { margin-bottom: .75em; }
-  .ps { color: var(--accent); font-weight: 700; }
-  .ps .path { color: var(--accent); font-weight: 400; }
-  .ps .sigil { color: var(--fg); font-weight: 400; }
-  .role { margin-bottom: .35em; }
-  .role + ul { margin-bottom: 1.1em; }
-  .skillrow { padding-left: 4ch; text-indent: -4ch; margin-bottom: .35em; }
-  .tree { white-space: pre; }
+    noscript pre { white-space: pre-wrap; padding: 24px; font-size: 14px; }
 
-  /* the live prompt */
-  #prompt { display: flex; align-items: baseline; gap: 1ch; margin-top: .25em; }
-  #prompt label { white-space: nowrap; }
-  #cmdline {
-    flex: 1;
-    min-width: 0;
-    font: inherit;
-    color: inherit;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    outline: none;
-    caret-color: var(--fg);
-  }
-  #cmdline::placeholder { color: transparent; }
-  /* block cursor when the field is empty and unfocused, so the prompt reads as a
-     terminal. It hangs off the label, right after the "$", so the input's flex
-     stretch cannot push it to the end of the row. */
-  #prompt.idle label::after { content: " █"; animation: blink 1.1s steps(1) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { #prompt.idle label::after { animation: none; } }
-  html:not(.js) #prompt { display: none; }
-
-  /* Phones: the banner needs ~35 columns. Tighten the frame so it does not wrap. */
-  @media (max-width: 640px) {
-    #app { padding: 4px; }
-    #term-host { padding: 12px 8px 22px 8px; border-radius: 6px; }
-    body { font-size: 13px; }
-    .banner { font-size: 11.5px; }
-    ul { padding-left: 3ch; }
-    .skillrow { padding-left: 3ch; text-indent: -3ch; }
-  }
-</style>
+    /* Phones: the home banner needs ~24 cols plus the frame. Tighten the outer
+       margins and the terminal's own padding so nothing wraps. */
+    @media (max-width: 640px) {
+      #app { padding: 4px; }
+      #term-host {
+        padding: 12px 8px 22px 8px;
+        border-radius: 6px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-unicode11@0.8.0/lib/addon-unicode11.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 </head>
 
 <body>
   <!-- CRT pixel misalignment: a smooth feTurbulence field drives feDisplacementMap
-       at a small scale, so pixels shift a hair organically. Text stays sharp; it
-       reads as a subtle painted misalignment rather than a blur. -->
+       at a small scale, so pixels shift a hair organically — text stays sharp,
+       just a subtle painted misalignment. In-filter turbulence (no external
+       image → Safari-friendly), region pinned to the box. -->
   <svg class="defs-only" aria-hidden="true" focusable="false">
     <defs>
       <filter id="crt-smudge" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
@@ -203,308 +179,936 @@
 
   <div id="app">
     <div id="term-host">
-      <div id="term-screen">
-        <main id="scrollback" aria-live="polite">
-
-          <section class="entry" id="bio">
-            <p class="h1"># Yang Zhao <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
-<pre class="banner" aria-label="Yang Zhao">
- █ █ █▀█ █▀█ █▀▀   ▀▀█ █ █ █▀█ █▀█
-  █  █▀█ █ █ █ █   ▄▀  █▀█ █▀█ █ █
-  ▀  ▀ ▀ ▀ ▀ ▀▀▀   ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀
-</pre>
-            <p><b>Backend Software Engineer</b> · <a href="https://www.northeastern.edu/" rel="noopener">Northeastern University</a> · M.S., graduating Dec 2026<br>
-               <b>Previously</b> · <a href="https://www.splunk.com/" rel="noopener">Splunk</a> (Cisco) · Backend Software Engineer Intern, 2025 &amp; 2026</p>
-            <div class="quote">
-              <p>👤 <a href="#bio">bio</a> · 💼 <a href="#experience">experience</a> · 🛠 <a href="#projects">projects</a> · 📄 <a href="Yang_Zhao_Resume.pdf" target="_blank" rel="noopener">résumé</a><br>
-                 🐙 <a href="https://github.com/YZhao-prog" rel="noopener">GitHub</a> · 🔗 <a href="https://linkedin.com/in/yang-zhao-48b12431a" rel="noopener">LinkedIn</a> · 🎯 <a href="https://yzhao-prog.github.io/newgrad-search/" rel="noopener">job tracker</a></p>
-              <div class="blank"></div>
-              <p>Boston, MA<br>Open to new-grad software engineering roles · available January 2027</p>
-            </div>
-            <p><i>I build database kernels and distributed systems, and love building highly efficient infrastructure.</i></p>
-            <div class="blank"></div>
-            <ul class="tight">
-              <li>This page doubles as a shell.<br>Try: <code>bio</code>, <code>help</code>, <code>cat projects.md</code>.</li>
-            </ul>
-            <div class="blank"></div>
-            <p>Last update: Sat Sep 06 2026</p>
-          </section>
-        </main>
-
-        <!-- The files. Hidden when JS is on (printed on demand), shown when it is off. -->
-        <div id="archive">
-          <section class="entry" id="experience">
-            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat experience.md</div>
-            <div class="out">
-              <p class="h2">## Experience</p>
-              <p class="role"><b>Splunk</b> · Backend Software Engineer Intern · San Jose, CA · <span class="dim">Jun–Sep 2026</span></p>
-              <ul>
-                <li>Designed and implemented a C++ cache management system for a Raft-coordinated distributed search cluster, preserving search result availability under bounded local storage.</li>
-                <li>Built an in-memory storage tracker that keeps a running total of cache disk usage in a hash map keyed by artifact directory, reading each artifact's size from its status-file metadata in O(1) instead of rescanning directories.</li>
-                <li>Designed size-based eviction that reclaims artifacts in LRU order by last-use timestamp until the tracked total falls below a configurable ceiling, preventing disk-full failures.</li>
-                <li>Engineered an artifact offloading pipeline across concurrent workers, AWS S3, and a PostgreSQL-backed KV store, sustaining 500 concurrent offloads with zero metadata inconsistencies or duplicate uploads.</li>
-                <li>Validated eviction through a soak test of 125K+ searches with before/after rollout metrics, holding local disk at its 4 GiB ceiling on 100% of cycles with zero errors or crashes.</li>
-              </ul>
-              <p class="role"><b>Splunk</b> · Backend Software Engineer Intern · Boston, MA · <span class="dim">Sep–Dec 2025</span></p>
-              <ul>
-                <li>Built a cross-node artifact sharing system in C++ for a Raft-coordinated search cluster, persisting results to AWS S3 so any node can serve them via REST APIs.</li>
-                <li>Shipped remote artifact storage behind a feature flag, supporting its staged rollout from internal clusters to the full production fleet.</li>
-                <li>Optimized the artifact storage pipeline with asynchronous uploads, keeping search latency unaffected under high write volume at a 0.62% storage-cost impact.</li>
-                <li>Delivered zero-downtime rolling upgrades by designing a backward-compatible storage schema.</li>
-                <li>Created a functional test suite for CI/CD regression coverage and load-tested the feature at a production scale of 600K+ daily searches with zero failures.</li>
-              </ul>
-            </div>
-          </section>
-
-          <section class="entry" id="projects">
-            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat projects.md</div>
-            <div class="out">
-              <p class="h2">## Projects</p>
-              <p class="role"><b><a href="https://github.com/YZhao-prog/SharkDB" rel="noopener">SharkDB</a></b> — SQL database engine · <span class="dim">Rust · 138 stars</span></p>
-              <ul>
-                <li>Hand-written parser, rule-based optimizer (constant folding, predicate pushdown, primary-key point-lookup rewriting, hash-join selection) and a parallel execution engine, ~2× on 200K-row analytical queries.</li>
-                <li>Three interchangeable storage engines behind one trait: in-memory B-tree, Bitcask-style log, and a custom LSM-tree with WAL, SSTables, Bloom filters and leveled compaction; crash recovery ~16× faster than full-log replay.</li>
-                <li>MVCC with snapshot isolation and optimistic concurrency control, verified against dirty, non-repeatable and phantom reads.</li>
-                <li>Optional gRPC service (tonic + Protocol Buffers): unary and server-streaming execution with client-controlled batch sizes, session lifecycle, and engine errors mapped to status codes by fault type. 13 integration tests over real sockets.</li>
-              </ul>
-              <p class="role"><b><a href="https://github.com/YZhao-prog/raft-kv" rel="noopener">raft-kv</a></b> — distributed key-value store · <span class="dim">Go</span></p>
-              <ul>
-                <li>Full Raft consensus: leader election, log replication, persistence, snapshotting and crash recovery under partitions.</li>
-                <li>Linearizable KV service with request dedup and at-most-once semantics, verified with linearizability testing.</li>
-                <li>Sharded store with a replicated shard controller supporting dynamic migration and rebalancing.</li>
-              </ul>
-              <p class="role"><b><a href="https://yzhao-prog.github.io/newgrad-search/" rel="noopener">newgrad-search</a></b> — new-grad job tracker · <span class="dim">HTML · <a href="https://github.com/YZhao-prog/newgrad-search" rel="noopener">source</a></span></p>
-              <ul>
-                <li>Aggregates new-grad postings across companies with per-company tiers and sponsorship flags.</li>
-              </ul>
-            </div>
-          </section>
-
-          <section class="entry" id="skills">
-            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat skills.md</div>
-            <div class="out">
-              <p class="h2">## Skills</p>
-              <p class="skillrow"><b>Languages</b>      C++ · Rust · Go · Java · Python · SQL · TypeScript · JavaScript</p>
-              <p class="skillrow"><b>Backend</b>        gRPC · Protocol Buffers · REST APIs · Spring Boot · Django · Node.js / Express</p>
-              <p class="skillrow"><b>Data</b>           PostgreSQL · MySQL · MongoDB · Redis · RocksDB · Elasticsearch · Kafka · RabbitMQ</p>
-              <p class="skillrow"><b>Infra</b>          AWS (EC2 · S3 · Lambda · RDS) · Docker · Kubernetes · Helm · Jenkins · CI/CD · Linux · CMake</p>
-              <p class="skillrow"><b>Observability</b>  Splunk · OpenTelemetry · Datadog · Prometheus · Grafana</p>
-              <p class="skillrow"><b>Frontend</b>       React · Next.js · Angular</p>
-            </div>
-          </section>
-
-          <section class="entry" id="education">
-            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat education.md</div>
-            <div class="out">
-              <p class="h2">## Education</p>
-              <p class="role"><b>Northeastern University</b> · M.S. Information Systems · GPA 3.8 / 4.0 · Boston, MA · <span class="dim">Sep 2024 – Dec 2026</span></p>
-              <ul><li>Linux/UNIX Systems · Data Structures · Algorithms · Object-Oriented Design · High-Performance Computing for AI</li></ul>
-              <p class="role"><b>The Chinese University of Hong Kong, Shenzhen</b> · B.Eng. Computer Science and Engineering · <span class="dim">Sep 2020 – Jun 2024</span></p>
-              <ul><li>Database Systems · Distributed and Parallel Computing · Operating Systems · Computer Architecture · Compilers · Computer Networks</li></ul>
-            </div>
-          </section>
-
-          <section class="entry" id="contact">
-            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat contact.md</div>
-            <div class="out">
-              <p class="h2">## Contact</p>
-              <p class="skillrow"><b>email</b>     <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
-              <p class="skillrow"><b>github</b>    <a href="https://github.com/YZhao-prog" rel="noopener">github.com/YZhao-prog</a></p>
-              <p class="skillrow"><b>linkedin</b>  <a href="https://linkedin.com/in/yang-zhao-48b12431a" rel="noopener">linkedin.com/in/yang-zhao-48b12431a</a></p>
-              <p class="skillrow"><b>résumé</b>    <a href="Yang_Zhao_Resume.pdf" target="_blank" rel="noopener">Yang_Zhao_Resume.pdf</a></p>
-            </div>
-          </section>
-        </div>
-
-        <form id="prompt" class="idle" autocomplete="off">
-          <label for="cmdline"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span></label>
-          <input id="cmdline" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="shell command" placeholder="help">
-        </form>
-      </div>
+      <div id="term-screen"></div>
     </div>
   </div>
 
+  <noscript><pre># Yang Zhao  yangzhao200124@gmail.com
+
+```plain
+▌ ▌         ▀▀▌▌
+▝▞▝▀▖▛▀▖▞▀▌  ▞ ▛▀▖▝▀▖▞▀▖
+ ▌▞▀▌▌ ▌▚▄▌ ▞  ▌ ▌▞▀▌▌ ▌
+ ▘▝▀▘▘ ▘▗▄▘ ▀▀▘▘ ▘▝▀▘▝▀
+```
+
+**Backend Software Engineer** · [Northeastern University](https://www.northeastern.edu/) · M.S., Dec 2026
+**Previously** · [Splunk](https://www.splunk.com/) (Cisco) · Backend Software Engineer Intern, 2025 & 2026
+
+> 👤 [Bio](#bio) · 💼 [Experience](#experience) · 🔧 [Projects](#projects) · 📄 [Résumé](Yang_Zhao_Resume.pdf)
+> 🐙 [GitHub](https://github.com/YZhao-prog) · 🔗 [LinkedIn](https://linkedin.com/in/yang-zhao-48b12431a) · 🎯 [Job tracker](https://yzhao-prog.github.io/newgrad-search/)
+>
+> Boston, MA
+> Open to new-grad software engineering roles · available January 2027
+
+*I build database kernels and distributed systems, and love building highly efficient infrastructure.*
+
+- This page doubles as a shell.
+  Try: `bio`, `help`, `tree bin/ | less`.
+
+Last update: Sun Sep 07 2026</pre></noscript>
+
   <script>
   (function () {
-    document.documentElement.classList.add('js');
+    'use strict';
 
-    var host = document.getElementById('term-host');
-    var screen = document.getElementById('term-screen');
-    var scrollback = document.getElementById('scrollback');
-    var form = document.getElementById('prompt');
-    var input = document.getElementById('cmdline');
-
-    // Reveal once the web font is in, so the fallback-font reflow never flashes.
-    var reveal = function () { host.classList.add('ready'); };
-    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reveal); }
-    setTimeout(reveal, 1200);
-
-    // ---- the "filesystem": each section is a file the visitor can cat ----
-    var FILES = {
-      'bio.md': 'bio', 'experience.md': 'experience', 'projects.md': 'projects',
-      'skills.md': 'skills', 'education.md': 'education', 'contact.md': 'contact',
-      'resume.pdf': null
-    };
-    var ALIAS = {
-      bio: 'bio.md', exp: 'experience.md', experience: 'experience.md',
-      projects: 'projects.md', proj: 'projects.md', skills: 'skills.md',
-      edu: 'education.md', education: 'education.md', contact: 'contact.md'
-    };
-    var LINKS = {
-      github: 'https://github.com/YZhao-prog',
-      linkedin: 'https://linkedin.com/in/yang-zhao-48b12431a',
-      tracker: 'https://yzhao-prog.github.io/newgrad-search/',
-      sharkdb: 'https://github.com/YZhao-prog/SharkDB',
-      raft: 'https://github.com/YZhao-prog/raft-kv',
-      resume: 'Yang_Zhao_Resume.pdf'
-    };
-
-    function esc(s) {
-      return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; });
-    }
-    function ps() {
-      return '<span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> ';
-    }
-    function print(cmd, html) {
-      var entry = document.createElement('section');
-      entry.className = 'entry';
-      entry.innerHTML = '<div class="cmd">' + ps() + esc(cmd) + '</div>' +
-        (html ? '<div class="out">' + html + '</div>' : '');
-      scrollback.appendChild(entry);
-      // Bring the command line to the top so a long file reads from its heading.
-      entry.scrollIntoView({ block: 'start' });
-    }
-    // Snapshot every file's HTML once at startup, so `clear` cannot take a
-    // file with it and every cat prints from a pristine copy.
-    var CONTENT = {};
-    ['bio', 'experience', 'projects', 'skills', 'education', 'contact'].forEach(function (id) {
-      var sec = document.getElementById(id);
-      if (!sec) { return; }
-      var out = sec.querySelector('.out');
-      CONTENT[id] = (out || sec).innerHTML;
-    });
-    function sectionHTML(id) { return CONTENT[id] || ''; }
-    function open(url) { window.open(url, '_blank', 'noopener'); }
-
-    var HELP =
-      '<div class="tree">' +
-      'help                 this list\n' +
-      'ls                   list files\n' +
-      'cat &lt;file&gt;           print a file, e.g. cat experience.md\n' +
-      'bio | exp | projects | skills | edu | contact\n' +
-      '                     shortcuts for the files above\n' +
-      'resume               open the PDF résumé\n' +
-      'open &lt;name&gt;          github · linkedin · tracker · sharkdb · raft\n' +
-      'tree                 show the file tree\n' +
-      'clear                clear the screen\n' +
-      'whoami · pwd · date · echo\n' +
-      '</div>';
-
-    var COMMANDS = {
-      help: function () { return HELP; },
-      ls: function () { return Object.keys(FILES).join('  '); },
-      tree: function () {
-        return '<div class="tree">.\n' +
-          Object.keys(FILES).map(function (f, i, a) { return (i === a.length - 1 ? '└── ' : '├── ') + f; }).join('\n') +
-          '</div>';
+    // ------------------------------------------------------------------
+    // Documents. Each one is both a file (cat, less, grep …) and a command
+    // that clears the screen and renders it.
+    // ------------------------------------------------------------------
+    var DOCUMENTS = [
+      {
+        slug: 'index', title: 'Yang Zhao  yangzhao200124@gmail.com', kind: 'page', body:
+'# Yang Zhao  yangzhao200124@gmail.com\n' +
+'\n' +
+'```plain\n' +
+'▌ ▌         ▀▀▌▌\n' +
+'▝▞▝▀▖▛▀▖▞▀▌  ▞ ▛▀▖▝▀▖▞▀▖\n' +
+' ▌▞▀▌▌ ▌▚▄▌ ▞  ▌ ▌▞▀▌▌ ▌\n' +
+' ▘▝▀▘▘ ▘▗▄▘ ▀▀▘▘ ▘▝▀▘▝▀\n' +
+'```\n' +
+'\n' +
+'\n' +
+'**Backend Software Engineer** · [Northeastern University](https://www.northeastern.edu/) · M.S., Dec 2026\n' +
+'**Previously** · [Splunk](https://www.splunk.com/) (Cisco) · Backend Software Engineer Intern, 2025 & 2026\n' +
+'\n' +
+'> 👤 [Bio](#bio) · 💼 [Experience](#experience) · 🔧 [Projects](#projects) · 📄 [Résumé](Yang_Zhao_Resume.pdf)\n' +
+'> 🐙 [GitHub](https://github.com/YZhao-prog) · 🔗 [LinkedIn](https://linkedin.com/in/yang-zhao-48b12431a) · 🎯 [Job tracker](https://yzhao-prog.github.io/newgrad-search/)\n' +
+'>\n' +
+'> Boston, MA\n' +
+'> Open to new-grad software engineering roles · available January 2027\n' +
+'\n' +
+'*I build database kernels and distributed systems, and love building highly efficient infrastructure.*\n' +
+'\n' +
+'- This page doubles as a shell.\n' +
+'  Try: `bio`, `help`, `tree bin/ | less`.\n' +
+'\n' +
+'Last update: Sun Sep 07 2026'
       },
-      cat: function (args) {
-        if (!args.length) { return 'usage: cat &lt;file&gt;'; }
-        var name = ALIAS[args[0]] || args[0];
-        if (name === 'resume.pdf') { open(LINKS.resume); return 'resume.pdf: binary file — opening in a new tab'; }
-        if (!(name in FILES)) { return 'cat: ' + esc(args[0]) + ': No such file'; }
-        document.title = '~yzhao: ' + name.replace(/\.md$/, '');
-        return sectionHTML(FILES[name]);
+      {
+        slug: 'bio', title: 'Bio', kind: 'page', body:
+'# Bio\n' +
+'\n' +
+"I'm a backend engineer finishing an M.S. at [Northeastern University](https://www.northeastern.edu/) in Boston (December 2026), after a B.Eng. in Computer Science and Engineering at [The Chinese University of Hong Kong, Shenzhen](https://www.cuhk.edu.cn/).\n" +
+'\n' +
+'I spent two internships at [Splunk](https://www.splunk.com/) (Cisco) on the storage side of a distributed search platform: cross-node artifact sharing on S3, a disk cache with size-aware LRU eviction, and the offloading pipeline between them. On my own time I write database internals in Rust ([SharkDB](https://github.com/YZhao-prog/SharkDB)) and consensus in Go ([raft-kv](https://github.com/YZhao-prog/raft-kv)).\n' +
+'\n' +
+"I'm looking for new-grad software engineering roles starting January 2027, ideally on databases, storage, or distributed infrastructure.\n" +
+'\n' +
+'> 📧 yangzhao200124@gmail.com\n' +
+'> 🐙 [github.com/YZhao-prog](https://github.com/YZhao-prog) · 🔗 [LinkedIn](https://linkedin.com/in/yang-zhao-48b12431a) · 📄 [Résumé (PDF)](Yang_Zhao_Resume.pdf)'
       },
-      resume: function () { open(LINKS.resume); return 'opening Yang_Zhao_Resume.pdf'; },
-      cv: function () { return COMMANDS.resume(); },
-      open: function (args) {
-        var key = (args[0] || '').toLowerCase();
-        if (!LINKS[key]) { return 'open: choose one of ' + Object.keys(LINKS).join(' · '); }
-        open(LINKS[key]); return 'opening ' + LINKS[key];
+      {
+        slug: 'experience', title: 'Experience', kind: 'page', body:
+'# Experience\n' +
+'\n' +
+'## Splunk — Backend Software Engineer Intern\n' +
+'\n' +
+'San Jose, CA · June – September 2026\n' +
+'\n' +
+'- Designed and implemented a C++ cache management system for a Raft-coordinated distributed search cluster, preserving search result availability under bounded local storage.\n' +
+"- Built an in-memory storage tracker that keeps a running total of cache disk usage in a hash map keyed by artifact directory, reading each artifact's size from its status-file metadata in O(1) instead of rescanning directories.\n" +
+'- Designed size-based eviction that reclaims artifacts in LRU order by last-use timestamp until the tracked total falls below a configurable ceiling, preventing disk-full failures.\n' +
+'- Engineered an artifact offloading pipeline across concurrent workers, AWS S3, and a PostgreSQL-backed KV store, sustaining 500 concurrent offloads with zero metadata inconsistencies or duplicate uploads.\n' +
+'- Validated eviction through a soak test of 125K+ searches with before/after rollout metrics, holding local disk at its 4 GiB ceiling on 100% of cycles with zero errors or crashes.\n' +
+'\n' +
+'## Splunk — Backend Software Engineer Intern\n' +
+'\n' +
+'Boston, MA · September – December 2025\n' +
+'\n' +
+'- Built a cross-node artifact sharing system in C++ for a Raft-coordinated search cluster, persisting results to AWS S3 so any node can serve them via REST APIs.\n' +
+'- Shipped remote artifact storage behind a feature flag, supporting its staged rollout from internal clusters to the full production fleet.\n' +
+'- Optimized the artifact storage pipeline with asynchronous uploads, keeping search latency unaffected under high write volume at a 0.62% storage-cost impact.\n' +
+'- Delivered zero-downtime rolling upgrades by designing a backward-compatible storage schema.\n' +
+'- Created a functional test suite for CI/CD regression coverage and load-tested the feature at a production scale of 600K+ daily searches with zero failures.'
       },
-      clear: function () { scrollback.innerHTML = ''; document.title = '~yzhao'; return null; },
-      whoami: function () { return 'yzhao'; },
-      pwd: function () { return '/home/yzhao'; },
-      date: function () { return new Date().toString(); },
-      echo: function (args) { return esc(args.join(' ')); },
-      exit: function () { return 'There is no exit. Try <code>clear</code>.'; }
-    };
-    Object.keys(ALIAS).forEach(function (a) {
-      COMMANDS[a] = function () { return COMMANDS.cat([a]); };
-    });
-
-    function run(line) {
-      var parts = line.trim().split(/\s+/);
-      var cmd = parts[0];
-      if (!cmd) { print(''); return; }
-      var fn = COMMANDS[cmd.toLowerCase()];
-      if (!fn) { print(line, 'bash: ' + esc(cmd) + ': command not found. Try <code>help</code>.'); return; }
-      var out = fn(parts.slice(1));
-      if (out === null) { return; }
-      print(line, out);
-    }
-
-    // ---- input: history, tab completion, focus handling ----
-    var history = [], cursor = -1;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var line = input.value;
-      if (line.trim()) { history.push(line); }
-      cursor = history.length;
-      input.value = '';
-      run(line);
-    });
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (cursor > 0) { cursor -= 1; input.value = history[cursor]; }
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (cursor < history.length - 1) { cursor += 1; input.value = history[cursor]; }
-        else { cursor = history.length; input.value = ''; }
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
-        var parts = input.value.split(/\s+/);
-        var last = parts[parts.length - 1];
-        var pool = parts.length > 1 ? Object.keys(FILES).concat(Object.keys(LINKS)) : Object.keys(COMMANDS);
-        var hits = pool.filter(function (w) { return w.indexOf(last) === 0; });
-        if (hits.length === 1) { parts[parts.length - 1] = hits[0]; input.value = parts.join(' ') + ' '; }
-        else if (hits.length > 1) { print(input.value, hits.join('  ')); }
-      } else if (e.key === 'l' && e.ctrlKey) {
-        e.preventDefault(); COMMANDS.clear();
+      {
+        slug: 'projects', title: 'Projects', kind: 'page', body:
+'# Projects\n' +
+'\n' +
+'## [SharkDB](https://github.com/YZhao-prog/SharkDB) — SQL database engine · Rust · 138 stars\n' +
+'\n' +
+'- Hand-written parser, rule-based optimizer (constant folding, predicate pushdown, primary-key point-lookup rewriting, hash-join selection) and a parallel execution engine, ~2× on 200K-row analytical queries.\n' +
+'- Three interchangeable storage engines behind one trait: in-memory B-tree, Bitcask-style log, and a custom LSM-tree with WAL, SSTables, Bloom filters and leveled compaction; crash recovery ~16× faster than full-log replay.\n' +
+'- MVCC with snapshot isolation and optimistic concurrency control, verified against dirty, non-repeatable and phantom reads.\n' +
+'- Optional gRPC service (tonic + Protocol Buffers): unary and server-streaming execution with client-controlled batch sizes, session lifecycle, and engine errors mapped to status codes by fault type. 13 integration tests over real sockets.\n' +
+'\n' +
+'## [raft-kv](https://github.com/YZhao-prog/raft-kv) — distributed key-value store · Go\n' +
+'\n' +
+'- Full Raft consensus: leader election, log replication, persistence, snapshotting and crash recovery under partitions.\n' +
+'- Linearizable KV service with request dedup and at-most-once semantics, verified with linearizability testing.\n' +
+'- Sharded store with a replicated shard controller supporting dynamic migration and rebalancing.\n' +
+'\n' +
+'## [newgrad-search](https://yzhao-prog.github.io/newgrad-search/) — new-grad job tracker · HTML · [source](https://github.com/YZhao-prog/newgrad-search)\n' +
+'\n' +
+'- Aggregates new-grad postings across companies with per-company tiers and sponsorship flags.'
+      },
+      {
+        slug: 'skills', title: 'Skills', kind: 'page', body:
+'# Skills\n' +
+'\n' +
+'- **Languages** · C++ · Rust · Go · Java · Python · SQL · TypeScript · JavaScript\n' +
+'- **Backend** · gRPC · Protocol Buffers · REST APIs · Spring Boot · Django · Node.js / Express\n' +
+'- **Data** · PostgreSQL · MySQL · MongoDB · Redis · RocksDB · Elasticsearch · Kafka · RabbitMQ\n' +
+'- **Infra** · AWS (EC2 · S3 · Lambda · RDS) · Docker · Kubernetes · Helm · Jenkins · CI/CD · Linux · CMake\n' +
+'- **Observability** · Splunk · OpenTelemetry · Datadog · Prometheus · Grafana\n' +
+'- **Frontend** · React · Next.js · Angular'
+      },
+      {
+        slug: 'education', title: 'Education', kind: 'page', body:
+'# Education\n' +
+'\n' +
+'## Northeastern University — M.S. Information Systems\n' +
+'\n' +
+'Boston, MA · September 2024 – December 2026 · GPA 3.8 / 4.0\n' +
+'\n' +
+'- Linux/UNIX Systems · Data Structures · Algorithms · Object-Oriented Design · High-Performance Computing for AI\n' +
+'\n' +
+'## The Chinese University of Hong Kong, Shenzhen — B.Eng. Computer Science and Engineering\n' +
+'\n' +
+'Shenzhen, China · September 2020 – June 2024\n' +
+'\n' +
+'- Database Systems · Distributed and Parallel Computing · Operating Systems · Computer Architecture · Compilers · Computer Networks'
+      },
+      {
+        slug: 'contact', title: 'Contact', kind: 'page', body:
+'# Contact\n' +
+'\n' +
+'- **email** · yangzhao200124@gmail.com\n' +
+'- **github** · [github.com/YZhao-prog](https://github.com/YZhao-prog)\n' +
+'- **linkedin** · [linkedin.com/in/yang-zhao-48b12431a](https://linkedin.com/in/yang-zhao-48b12431a)\n' +
+'- **résumé** · [Yang_Zhao_Resume.pdf](Yang_Zhao_Resume.pdf)'
+      },
+      {
+        slug: 'help', title: 'Help', kind: 'page', body:
+'# Help\n' +
+'\n' +
+'This site is a terminal. Documents are commands — `index`, `bio`, `experience` —\n' +
+'and tools live in `/bin`.\n' +
+'\n' +
+'## documents\n' +
+'\n' +
+'- `index`       the home page (also `exit`, or Ctrl-D on an empty line)\n' +
+'- `bio`         who I am\n' +
+'- `experience`  where I have worked\n' +
+'- `projects`    what I have built\n' +
+'- `skills`      what I use\n' +
+'- `education`   where I studied\n' +
+'- `contact`     how to reach me\n' +
+'\n' +
+'## commands\n' +
+'\n' +
+'- `ls [dir]`    list a directory (try `ls /bin`)\n' +
+'- `cat <path>`  print a document (no clear; pipe-friendly)\n' +
+'- `head [path]` first lines (`head -n 5 index`, `cat index | head`)\n' +
+'- `tail [path]` last lines (`tail -n 3 index`)\n' +
+'- `grep <pat>`  filter lines (`cat projects | grep Rust`)\n' +
+'- `find [path]` walk the FS (`find /bin -type f`, `find -name projects`)\n' +
+'- `tree [path]` draw the FS as a tree\n' +
+'- `more [path]` page a document or stdin (space/b/q)\n' +
+'- `less [path]` same pager, with PageUp/PageDown\n' +
+'- `cd <dir>`    change directory (`cd /bin`, `cd ..`, `cd /`)\n' +
+'- `clear`       clear the screen\n' +
+'- `wc`          count lines/words/bytes from stdin\n' +
+'- `exit`        return to the home page\n' +
+'\n' +
+'## tips\n' +
+'\n' +
+'- Run a page like `bio` to open it (clears the screen).\n' +
+'- Pipes work: `cat experience | wc -l`.\n' +
+'- Paths: `./projects`, `/help`, `../`.\n' +
+'- History: ↑/↓ or Ctrl-P/N. Cancel: Ctrl-C. Clear: Ctrl-L.'
       }
-    });
-    input.addEventListener('focus', function () { form.classList.remove('idle'); });
-    input.addEventListener('blur', function () { if (!input.value) { form.classList.add('idle'); } });
+    ];
 
-    // Click anywhere in the terminal (that is not a link or selection) to focus the prompt.
-    host.addEventListener('click', function (e) {
-      if (e.target.closest('a') || window.getSelection().toString()) { return; }
-      input.focus({ preventScroll: true });
-    });
-    // Start typing from anywhere on the page and it lands in the prompt.
-    document.addEventListener('keydown', function (e) {
-      if (e.target === input || e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) { return; }
-      input.focus();
-      screen.scrollTop = screen.scrollHeight;
-    });
-
-    // Nav links: with JS on, "#experience" prints experience.md instead of jumping.
-    document.addEventListener('click', function (e) {
-      var a = e.target.closest('a[href^="#"]');
-      if (!a) { return; }
-      var id = a.getAttribute('href').slice(1);
-      if (!CONTENT[id]) { return; }
-      e.preventDefault();
-      location.replace('#' + id);
-      run('cat ' + id + '.md');
-    });
-    // A deep link such as /#projects prints that file on arrival.
-    if (location.hash && CONTENT[location.hash.slice(1)]) {
-      run('cat ' + location.hash.slice(1) + '.md');
+    function makeStore(docs) {
+      var bySlug = {};
+      docs.forEach(function (d) { d.path = d.slug + '.md'; bySlug[d.slug] = d; });
+      return {
+        get: function (name) {
+          if (!name) { return null; }
+          var n = String(name).replace(/^\/+/, '');
+          if (bySlug[n]) { return bySlug[n]; }
+          if (/\.md$/.test(n) && bySlug[n.slice(0, -3)]) { return bySlug[n.slice(0, -3)]; }
+          return null;
+        },
+        all: function () { return docs.slice(); }
+      };
     }
+
+    // ------------------------------------------------------------------
+    // ANSI helpers and display-width arithmetic.
+    // ------------------------------------------------------------------
+    var RESET = '\x1b[0m', BOLD = '\x1b[1m', DIM = '\x1b[2m', ITALIC = '\x1b[3m';
+    function c256(n) { return '\x1b[38;5;' + n + 'm'; }
+    function cup(col, row) { return '\x1b[' + (row + 1) + ';' + (col + 1) + 'H'; }
+    function osc8(url, text) { return '\x1b]8;;' + url + '\x1b\\' + text + '\x1b]8;;\x1b\\'; }
+    var STYLE = { heading: c256(62), bullet: c256(242), border: c256(244), hr: c256(252), dir: BOLD + c256(62) };
+
+    function isZeroWidth(cp) {
+      return cp === 0x200d || cp === 0x200c || (cp >= 0xfe00 && cp <= 0xfe0f) ||
+        (cp >= 0x1f3fb && cp <= 0x1f3ff) || (cp >= 0x300 && cp <= 0x36f) ||
+        (cp >= 0x1ab0 && cp <= 0x1aff) || (cp >= 0x1dc0 && cp <= 0x1dff) ||
+        (cp >= 0x20d0 && cp <= 0x20ff) || (cp >= 0xfe20 && cp <= 0xfe2f);
+    }
+    function isRegional(cp) { return cp >= 0x1f1e6 && cp <= 0x1f1ff; }
+    function cpWidth(cp) {
+      if (isZeroWidth(cp)) { return 0; }
+      if (cp < 0x300) { return 1; }
+      if ((cp >= 0x1100 && cp <= 0x115f) || (cp >= 0x2e80 && cp <= 0x303e) || (cp >= 0x3040 && cp <= 0x33bf) ||
+          (cp >= 0x3400 && cp <= 0x4dbf) || (cp >= 0x4e00 && cp <= 0xa4cf) || (cp >= 0xac00 && cp <= 0xd7a3) ||
+          (cp >= 0xf900 && cp <= 0xfaff) || (cp >= 0xfe30 && cp <= 0xfe6f) || (cp >= 0xff00 && cp <= 0xff60) ||
+          (cp >= 0xffe0 && cp <= 0xffe6) || (cp >= 0x1f000 && cp <= 0x1faff)) { return 2; }
+      return 1;
+    }
+    // Width of a string with no escape sequences, emoji-aware.
+    function strWidth(s) {
+      var cps = Array.from(s).map(function (ch) { return ch.codePointAt(0) || 0; });
+      var w = 0, joined = false;
+      for (var i = 0; i < cps.length; i++) {
+        var cp = cps[i];
+        if (cp === 0x200d) { joined = true; continue; }
+        if (isZeroWidth(cp)) { continue; }
+        if (joined) { joined = false; continue; }
+        if (isRegional(cp) && i + 1 < cps.length && isRegional(cps[i + 1])) { w += 2; i++; continue; }
+        w += cpWidth(cp);
+      }
+      return w;
+    }
+    var stripAnsi = function (s) { return s.replace(/\x1b\[[0-9;:]*m/g, '').replace(/\x1b\]8;;[^\x1b]*\x1b\\/g, ''); };
+
+    // ------------------------------------------------------------------
+    // Word wrap that keeps SGR state and OSC 8 links intact across lines.
+    // ------------------------------------------------------------------
+    function tokenize(s) {
+      var out = [], i = 0, n = s.length;
+      while (i < n) {
+        if (s[i] === '\x1b') {
+          var m = /^\x1b\[[0-9;:]*m/.exec(s.slice(i)) || /^\x1b\]8;;[^\x1b]*\x1b\\/.exec(s.slice(i));
+          if (m) {
+            var seq = m[0];
+            out.push({ kind: seq[1] === '[' ? 'sgr' : 'osc', seq: seq });
+            i += seq.length;
+            continue;
+          }
+        }
+        var cp = s.codePointAt(i), ch = String.fromCodePoint(cp);
+        out.push({ kind: 'ch', s: ch, w: cpWidth(cp) });
+        i += ch.length;
+      }
+      return out;
+    }
+    function wrapLine(line, width) {
+      if (width < 1) { width = 1; }
+      var toks = tokenize(line), words = [], cur = [], curW = 0;
+      var flush = function () { if (cur.length) { words.push({ toks: cur, w: curW }); cur = []; curW = 0; } };
+      toks.forEach(function (t) {
+        if (t.kind === 'ch' && t.s === ' ') { flush(); return; }
+        if (t.kind === 'ch') { curW += t.w; }
+        cur.push(t);
+      });
+      flush();
+      var lines = [], buf = '', len = 0, sgr = '', link = '';
+      var open = function () { return sgr + link; };
+      var close = function () { return (link ? '\x1b]8;;\x1b\\' : '') + (sgr ? RESET : ''); };
+      var endLine = function () { lines.push(buf + close()); buf = open(); len = 0; };
+      var track = function (t) {
+        if (t.kind === 'sgr') { sgr = (t.seq === RESET || t.seq === '\x1b[m') ? '' : sgr + t.seq; }
+        else if (t.kind === 'osc') { link = t.seq === '\x1b]8;;\x1b\\' ? '' : t.seq; }
+      };
+      buf = '';
+      words.forEach(function (word) {
+        if (word.w === 0) { word.toks.forEach(function (t) { track(t); buf += t.seq; }); return; }
+        if (len > 0 && len + 1 + word.w > width) { endLine(); }
+        if (len > 0) { buf += ' '; len += 1; }
+        if (word.w <= width) {
+          word.toks.forEach(function (t) { if (t.kind !== 'ch') { track(t); buf += t.seq; } else { buf += t.s; } });
+          len += word.w;
+        } else {
+          word.toks.forEach(function (t) {
+            if (t.kind !== 'ch') { track(t); buf += t.seq; return; }
+            if (len > 0 && len + t.w > width) { endLine(); }
+            buf += t.s; len += t.w;
+          });
+        }
+      });
+      if (len > 0 || lines.length === 0) { lines.push(buf + close()); }
+      return lines;
+    }
+    function wrapText(text, width) {
+      var out = [];
+      text.split('\n').forEach(function (l) {
+        var w = wrapLine(l, width);
+        if (w.length) { out.push.apply(out, w); } else { out.push(''); }
+      });
+      return out;
+    }
+
+    // ------------------------------------------------------------------
+    // Markdown → ANSI, via marked's lexer.
+    // ------------------------------------------------------------------
+    function resolveHref(href) {
+      if (href.indexOf('#') === 0) { return location.origin + location.pathname + href; }
+      if (!/^[a-z][a-z0-9+.-]*:/i.test(href)) { try { return new URL(href, location.href).href; } catch (e) { return href; } }
+      return href;
+    }
+    // marked hands back HTML-escaped text; the terminal wants the characters.
+    var ENTITIES = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+    function unescapeHtml(s) { return String(s).replace(/&(amp|lt|gt|quot|#39);/g, function (m) { return ENTITIES[m]; }); }
+    function inline(tokens) {
+      return tokens ? tokens.map(inlineOne).join('') : '';
+    }
+    function inlineOne(t) {
+      switch (t.type) {
+        case 'strong': return BOLD + inline(t.tokens) + RESET;
+        case 'em': return ITALIC + inline(t.tokens) + RESET;
+        case 'codespan': return '\x1b[58;5;252m\x1b[4m' + unescapeHtml(t.text) + RESET;
+        case 'link': {
+          if (t.href.indexOf('mailto:') === 0 || (!/^[a-z][a-z0-9+.-]*:/i.test(t.href) && t.href.indexOf('@') >= 0)) {
+            return inline(t.tokens) || t.href;
+          }
+          return osc8(resolveHref(t.href), inline(t.tokens) || t.href);
+        }
+        case 'image': return DIM + '[img: ' + (t.text || t.href) + ']' + RESET;
+        case 'br': return '\n';
+        case 'escape': return unescapeHtml(t.text);
+        default: return t.tokens ? inline(t.tokens) : (t.text != null ? unescapeHtml(t.text) : '');
+      }
+    }
+    function block(t, width) {
+      switch (t.type) {
+        case 'heading': {
+          var hashes = '#'.repeat(t.depth) + ' ', text = inline(t.tokens);
+          if (t.depth === 1) {
+            var w = strWidth(hashes + stripAnsi(text));
+            return BOLD + STYLE.heading + hashes + text + RESET + '\n' + STYLE.border + '─'.repeat(Math.max(2, w)) + RESET + '\n\n';
+          }
+          return '\n' + BOLD + STYLE.heading + hashes + text + RESET + '\n\n';
+        }
+        case 'paragraph': {
+          var p = inline(t.tokens);
+          return (width ? wrapText(p, width).join('\n') : p) + '\n\n';
+        }
+        case 'list': {
+          var rows = [];
+          t.items.forEach(function (item, i) {
+            var marker = t.ordered ? (i + 1) + '. ' : STYLE.bullet + '•' + RESET + ' ';
+            var body = inline(item.tokens).trim();
+            if (!width) { rows.push('  ' + marker + body); return; }
+            var indent = 2 + strWidth(stripAnsi(marker));
+            var wrapped = wrapText(body, Math.max(1, width - indent));
+            rows.push('  ' + marker + wrapped[0]);
+            for (var k = 1; k < wrapped.length; k++) { rows.push(' '.repeat(indent) + wrapped[k]); }
+          });
+          return rows.join('\n') + '\n\n';
+        }
+        case 'code': return t.text.replace(/\n$/, '') + '\n\n';
+        case 'blockquote': {
+          var inner = width ? Math.max(1, width - 2) : 0;
+          return (t.tokens || []).map(function (x) { return block(x, inner); }).join('').replace(/\s+$/, '')
+            .split('\n').map(function (l) { return STYLE.border + '│' + RESET + ' ' + l; }).join('\n') + '\n\n';
+        }
+        case 'hr': return STYLE.hr + '─'.repeat(40) + RESET + '\n\n';
+        case 'table': {
+          var lines = [t.header.map(function (c) { return inline(c.tokens); }).join(' | ')];
+          t.rows.forEach(function (r) { lines.push(r.map(function (c) { return inline(c.tokens); }).join(' | ')); });
+          return lines.map(function (l) { return '  ' + l; }).join('\n') + '\n\n';
+        }
+        case 'space': case 'html': return '';
+        default: return inline([t]);
+      }
+    }
+    function render(md, width) {
+      return marked.lexer(md).map(function (t) { return block(t, width || 0); }).join('')
+        .replace(/\n{3,}/g, '\n\n').replace(/\s+$/, '') + '\n\n';
+    }
+
+    // ------------------------------------------------------------------
+    // Terminal wrapper: shell mode for the prompt, tui mode for pagers.
+    // ------------------------------------------------------------------
+    var XTerm = (window.Terminal && window.Terminal.Terminal) ? window.Terminal.Terminal : window.Terminal;
+    var Fit = window.FitAddon.FitAddon, Unicode11 = window.Unicode11Addon.Unicode11Addon;
+
+    function hashSlug(uri) {
+      try {
+        if (uri.indexOf('#') === 0) { return uri.slice(1) || null; }
+        var u = new URL(uri, location.href);
+        if (u.origin === location.origin && u.pathname === location.pathname && u.hash) { return u.hash.slice(1) || null; }
+      } catch (e) { /* not a URL */ }
+      return null;
+    }
+
+    function Term(el, onNavigate) {
+      var self = this;
+      this.mode = 'shell';
+      this.shellDataCb = null; this.tuiKeyCb = null; this.tuiResizeCb = null;
+      this.fitAddon = new Fit();
+      this.xterm = new XTerm({
+        fontFamily: '"Maple Mono", "Fira Code", "JetBrains Mono", "SFMono-Regular", ui-monospace, Menlo, Consolas, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Apple Color Emoji", "Segoe UI Emoji", monospace',
+        fontSize: 16, lineHeight: 1, letterSpacing: 0, cursorBlink: true, allowProposedApi: true,
+        linkHandler: {
+          allowNonHttpProtocols: true,
+          activate: function (event, uri) {
+            var slug = hashSlug(uri);
+            if (slug !== null) { onNavigate(slug); return; }
+            window.open(uri, '_blank', 'noopener');
+          }
+        },
+        theme: { background: '#fafafa', foreground: '#2e3338', cursor: '#4a5158', selectionBackground: '#d0d7de' }
+      });
+      this.xterm.loadAddon(this.fitAddon);
+      this.xterm.open(el);
+      try { this.xterm.loadAddon(new Unicode11()); this.xterm.unicode.activeVersion = '11'; }
+      catch (e) { console.warn('unicode11 addon unavailable', e); }
+      this.fit();
+      var ro = new ResizeObserver(function () { self.fit(); });
+      ro.observe(el);
+      this.xterm.onData(function (d) { if (self.mode === 'shell' && self.shellDataCb) { self.shellDataCb(d); } });
+      this.xterm.onKey(function (e) { if (self.mode === 'tui' && self.tuiKeyCb) { self.tuiKeyCb(e); } });
+      this.xterm.onResize(function (s) { if (self.mode === 'tui' && self.tuiResizeCb) { self.tuiResizeCb(s); } });
+    }
+    Term.prototype = {
+      get cols() { return this.xterm.cols; },
+      get rows() { return this.xterm.rows; },
+      write: function (s) { this.xterm.write(s.replace(/(?<!\r)\n/g, '\r\n')); },
+      print: function (s) { this.write(s + '\n'); },
+      clear: function () { this.xterm.clear(); },
+      fit: function () { this.fitAddon.fit(); },
+      focus: function () { this.xterm.focus(); },
+      onShellData: function (cb) { this.shellDataCb = cb; },
+      takeOver: function () {
+        var self = this, x = this.xterm;
+        this.mode = 'tui';
+        return {
+          get cols() { return x.cols; }, get rows() { return x.rows; },
+          write: function (s) { x.write(s); },
+          clear: function () { x.reset(); },
+          onKey: function (cb) { self.tuiKeyCb = cb; return function () { if (self.tuiKeyCb === cb) { self.tuiKeyCb = null; } }; },
+          onResize: function (cb) { self.tuiResizeCb = cb; return function () { if (self.tuiResizeCb === cb) { self.tuiResizeCb = null; } }; },
+          release: function () { self.mode = 'shell'; }
+        };
+      }
+    };
+
+    // ------------------------------------------------------------------
+    // Shell: registry, tokenizer, paths, readline.
+    // ------------------------------------------------------------------
+    function makeRegistry() {
+      var m = new Map();
+      return { register: function (c) { m.set(c.name, c); }, get: function (n) { return m.get(n); }, list: function () { return Array.from(m.values()); } };
+    }
+    function splitArgs(s) {
+      var out = [], cur = '', q = false;
+      for (var i = 0; i < s.length; i++) {
+        var ch = s[i];
+        if (ch === '"') { q = !q; continue; }
+        if (!q && /\s/.test(ch)) { if (cur) { out.push(cur); cur = ''; } continue; }
+        cur += ch;
+      }
+      if (cur) { out.push(cur); }
+      return out;
+    }
+    function splitPipes(s) {
+      var out = [], cur = '', q = false;
+      for (var i = 0; i < s.length; i++) {
+        var ch = s[i];
+        if (ch === '"') { q = !q; cur += ch; }
+        else if (ch === '|' && !q) { out.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+      out.push(cur);
+      return out.map(function (x) { return x.trim(); }).filter(Boolean);
+    }
+    function resolvePath(p, cwd) {
+      var full = p.indexOf('/') === 0 ? p : cwd.replace(/\/$/, '') + '/' + p, parts = [];
+      full.split('/').forEach(function (seg) {
+        if (seg === '' || seg === '.') { return; }
+        if (seg === '..') { parts.pop(); } else { parts.push(seg); }
+      });
+      return parts.join('/');
+    }
+    function commonPrefix(list) {
+      if (!list.length) { return ''; }
+      var p = list[0];
+      list.forEach(function (s) { while (s.indexOf(p) !== 0) { p = p.slice(0, -1); } });
+      return p;
+    }
+
+    function Shell(opts) {
+      this.term = opts.term; this.registry = opts.registry; this.store = opts.store;
+      this.initialCommand = opts.initialCommand;
+      this.cwd = ''; this.curPrompt = ''; this.curWidth = 0;
+      this.buffer = ''; this.cursor = 0; this.history = []; this.histIdx = -1; this.resolveLine = null;
+    }
+    Shell.prototype = {
+      promptFor: function () {
+        var path = '/' + this.cwd;
+        return { text: c256(62) + 'yzhao' + RESET + ':' + c256(33) + path + RESET + c256(244) + '$' + RESET + ' ', width: ('yzhao:' + path + '$ ').length };
+      },
+      start: function () {
+        var self = this;
+        this.term.onShellData(function (d) { self.onData(d); });
+        var loop = function () {
+          self.buffer = ''; self.cursor = 0; self.histIdx = -1;
+          var p = self.promptFor();
+          self.curPrompt = p.text; self.curWidth = p.width;
+          self.term.write(self.curPrompt);
+          self.readLine().then(function (line) { return self.execute(line); }).then(loop);
+        };
+        if (this.initialCommand) {
+          var p = this.promptFor();
+          this.term.write(p.text + this.initialCommand + '\r\n');
+          this.execute(this.initialCommand).then(loop);
+        } else { loop(); }
+      },
+      inject: function (line) {
+        if (!this.resolveLine) { return; }
+        this.term.write(line + '\r\n');
+        var r = this.resolveLine; this.resolveLine = null; r(line);
+      },
+      readLine: function () { var self = this; return new Promise(function (res) { self.resolveLine = res; }); },
+      isDir: function (p) { return p === '' || p === 'bin'; },
+      chdir: function (p) {
+        var t = resolvePath(p, this.cwd);
+        if (this.isDir(t)) { this.cwd = t; return null; }
+        return p + ': not a directory';
+      },
+      listDir: function (p) {
+        var t = resolvePath(p, this.cwd);
+        if (t === '') {
+          return [{ name: 'bin', dir: true }].concat(this.store.all().map(function (d) { return { name: d.slug, dir: false }; }));
+        }
+        if (t === 'bin') {
+          return this.registry.list().filter(function (c) { return !c.builtin && !c.doc; }).map(function (c) { return { name: c.name, dir: false }; });
+        }
+        var d = this.store.get(t);
+        return d ? [{ name: d.slug, dir: false }] : null;
+      },
+      execute: function (line) {
+        var self = this, text = line.trim();
+        if (!text) { return Promise.resolve(); }
+        this.history.push(text);
+        var stages = splitPipes(text);
+        document.title = '~yzhao: ' + text;
+        var stdin = '';
+        var runStage = function (i) {
+          if (i >= stages.length) { return Promise.resolve(); }
+          var argv = splitArgs(stages[i]), name = argv[0], full = resolvePath(name, self.cwd);
+          var cmd = self.registry.get(name) || self.registry.get(full) || (full.indexOf('bin/') === 0 ? self.registry.get(full.slice(4)) : undefined);
+          if (!cmd) { self.term.print('command not found: ' + name + ' — try help'); return Promise.resolve(); }
+          var last = i === stages.length - 1, captured = '';
+          var stdout = last
+            ? { write: function (s) { self.term.write(s); }, print: function (s) { self.term.print(s); } }
+            : { write: function (s) { captured += s; }, print: function (s) { captured += s + '\n'; } };
+          var ctx = {
+            term: self.term, store: self.store, stdin: stdin, stdout: stdout, tty: last, cwd: self.cwd,
+            resolve: function (n) { return self.registry.get(n); }, list: function () { return self.registry.list(); },
+            chdir: function (p) { return self.chdir(p); }, listDir: function (p) { return self.listDir(p); }
+          };
+          return Promise.resolve().then(function () { return cmd.run(ctx, argv); })
+            .then(function () { stdin = captured; return runStage(i + 1); },
+                  function (err) { self.term.print('error: ' + String(err)); });
+        };
+        return runStage(0);
+      },
+      onData: function (d) {
+        if (!this.resolveLine) { return; }
+        switch (d) {
+          case '\r': case '\n': {
+            var line = this.buffer;
+            this.term.write('\r\n');
+            var r = this.resolveLine; this.resolveLine = null; r(line);
+            break;
+          }
+          case '\x7f': case '\b':
+            if (this.cursor > 0) {
+              var prev = Array.from(this.buffer.slice(0, this.cursor)); prev.pop();
+              var head = prev.join('');
+              this.buffer = head + this.buffer.slice(this.cursor); this.cursor = head.length; this.redraw();
+            }
+            break;
+          case '\x1b[A': case '\x1bOA': case '\x10': this.histMove('up'); break;
+          case '\x1b[B': case '\x1bOB': case '\x0e': this.histMove('down'); break;
+          case '\x1b[C': case '\x06': if (this.cursor < this.buffer.length) { this.cursor++; this.gotoCursor(); } break;
+          case '\x1b[D': case '\x02': if (this.cursor > 0) { this.cursor--; this.gotoCursor(); } break;
+          case '\x01': this.cursor = 0; this.gotoCursor(); break;
+          case '\x05': this.cursor = this.buffer.length; this.gotoCursor(); break;
+          case '\x0b': this.buffer = this.buffer.slice(0, this.cursor); this.redraw(); break;
+          case '\x15': this.buffer = this.buffer.slice(this.cursor); this.cursor = 0; this.redraw(); break;
+          case '\x17': {
+            var e = this.cursor;
+            while (e > 0 && /\s/.test(this.buffer[e - 1])) { e--; }
+            while (e > 0 && !/\s/.test(this.buffer[e - 1])) { e--; }
+            this.buffer = this.buffer.slice(0, e) + this.buffer.slice(this.cursor); this.cursor = e; this.redraw();
+            break;
+          }
+          case '\x04': {
+            if (this.buffer.length === 0) {
+              this.cwd = '';
+              var r2 = this.resolveLine; this.resolveLine = null; if (r2) { r2('index'); }
+              return;
+            }
+            if (this.cursor < this.buffer.length) {
+              var rest = Array.from(this.buffer.slice(this.cursor)); rest.shift();
+              this.buffer = this.buffer.slice(0, this.cursor) + rest.join(''); this.redraw();
+            }
+            break;
+          }
+          case '\x0c': this.term.write('\x1b[2J\x1b[3J\x1b[H'); this.redraw(); break;
+          case '\x03': {
+            this.term.write('^C\r\n');
+            var r3 = this.resolveLine; this.resolveLine = null; if (r3) { r3(''); }
+            break;
+          }
+          case '\t': this.complete(); break;
+          default:
+            if (d.length >= 1 && !/[\x00-\x1f\x7f]/.test(d)) {
+              this.buffer = this.buffer.slice(0, this.cursor) + d + this.buffer.slice(this.cursor);
+              this.cursor += d.length; this.redraw();
+            }
+        }
+      },
+      histMove: function (dir) {
+        var n = this.history.length;
+        if (!n) { return; }
+        if (dir === 'up') { this.histIdx = this.histIdx === -1 ? n - 1 : Math.max(0, this.histIdx - 1); }
+        else { if (this.histIdx === -1) { return; } this.histIdx++; if (this.histIdx >= n) { this.histIdx = -1; } }
+        var s = this.histIdx === -1 ? '' : this.history[this.histIdx];
+        this.buffer = s; this.cursor = s.length; this.redraw();
+      },
+      complete: function () {
+        var before = this.buffer.slice(0, this.cursor), start = before.lastIndexOf(' ') + 1, word = before.slice(start);
+        var first = start === 0, entries = this.listDir('.') || [], names = new Set(), dirs = new Set();
+        entries.forEach(function (e) { names.add(e.name); if (e.dir) { dirs.add(e.name); } });
+        if (first) { this.registry.list().forEach(function (c) { names.add(c.name); }); }
+        var hits = Array.from(names).filter(function (n) { return n.indexOf(word) === 0; }).sort();
+        if (!hits.length) { this.term.write('\x07'); return; }
+        if (hits.length === 1) { this.replaceWord(start, hits[0] + (dirs.has(hits[0]) ? '/' : ' ')); return; }
+        var cp = commonPrefix(hits);
+        if (cp.length > word.length) { this.replaceWord(start, cp); return; }
+        this.term.write('\r\n' + hits.join('  ') + '\r\n'); this.redraw();
+      },
+      replaceWord: function (start, text) {
+        this.buffer = this.buffer.slice(0, start) + text + this.buffer.slice(this.cursor);
+        this.cursor = start + text.length; this.redraw();
+      },
+      redraw: function () {
+        this.term.write('\r\x1b[0K' + this.curPrompt + this.buffer);
+        var back = strWidth(this.buffer) - strWidth(this.buffer.slice(0, this.cursor));
+        if (back > 0) { this.term.write('\x1b[' + back + 'D'); }
+      },
+      gotoCursor: function () {
+        this.term.write('\x1b[' + (this.curWidth + strWidth(this.buffer.slice(0, this.cursor)) + 1) + 'G');
+      }
+    };
+
+    // ------------------------------------------------------------------
+    // Commands.
+    // ------------------------------------------------------------------
+    function docCommand(doc) {
+      return {
+        name: doc.slug, description: doc.kind + ' · ' + doc.title, doc: true,
+        run: function (ctx) {
+          if (ctx.tty) { ctx.term.write('\x1b[2J\x1b[3J\x1b[H'); }
+          ctx.stdout.write(render(doc.body, ctx.term.cols));
+        }
+      };
+    }
+    function docText(ctx, path) {
+      var d = ctx.store.get(resolvePath(path, ctx.cwd));
+      return d ? render(d.body, ctx.term.cols) : null;
+    }
+    function toLines(s) { var t = /\n$/.test(s) ? s.slice(0, -1) : s; return t === '' ? [] : t.split('\n'); }
+    function fromLines(a) { return a.length ? a.join('\n') + '\n' : ''; }
+    function parseN(argv) {
+      var files = [], n = 10;
+      for (var i = 1; i < argv.length; i++) {
+        var a = argv[i];
+        if (a === '-n') { var v = argv[++i]; n = v ? parseInt(v, 10) : 10; }
+        else if (/^-n\d+$/.test(a)) { n = parseInt(a.slice(2), 10); }
+        else if (/^-\d+$/.test(a)) { n = parseInt(a.slice(1), 10); }
+        else { files.push(a); }
+      }
+      return { n: isFinite(n) && n > 0 ? n : 0, files: files };
+    }
+    function inputs(ctx, files, who) {
+      if (!files.length) { return [{ name: '(stdin)', text: ctx.stdin }]; }
+      var out = [];
+      files.forEach(function (f) {
+        var t = docText(ctx, f);
+        if (t === null) { ctx.stdout.print(who + ': ' + f + ': no such file'); return; }
+        out.push({ name: f, text: t });
+      });
+      return out;
+    }
+    function isDirPath(p, ctx) { return p === '' || p === 'bin'; }
+    function isFilePath(p, ctx) {
+      if (p === '' || p === 'bin') { return false; }
+      if (ctx.store.get(p)) { return true; }
+      return p.indexOf('bin/') === 0 && ctx.list().some(function (c) { return !c.builtin && !c.doc && c.name === p.slice(4); });
+    }
+    function dirEntries(p, ctx) {
+      if (p === 'bin') {
+        return ctx.list().filter(function (c) { return !c.builtin && !c.doc; }).map(function (c) { return { name: c.name, dir: false }; })
+          .sort(function (a, b) { return a.name.localeCompare(b.name); });
+      }
+      var files = ctx.store.all().map(function (d) { return { name: d.slug, dir: false }; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+      return [{ name: 'bin', dir: true }].concat(files);
+    }
+    function walk(p, disp, ctx, out) {
+      dirEntries(p, ctx).forEach(function (e) {
+        var d = (disp === '/' ? '' : disp) + '/' + e.name, a = p === '' ? e.name : p + '/' + e.name;
+        out.push({ disp: d, dir: e.dir });
+        if (e.dir) { walk(a, d, ctx, out); }
+      });
+    }
+    function globToRegExp(g) {
+      return new RegExp('^' + g.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.') + '$');
+    }
+
+    function pager(ctx, text) {
+      var tui = ctx.term.takeOver(), lines = text.split('\n'), top = 0, shown = 0;
+      var draw = function () {
+        tui.clear();
+        var cols = Math.max(1, tui.cols), h = Math.max(1, tui.rows - 1), all = [];
+        lines.forEach(function (l) { all.push.apply(all, wrapLine(l, cols)); });
+        var total = all.length, last = Math.max(0, total - h);
+        top = Math.min(top, last);
+        var view = all.slice(top, top + h);
+        shown = view.length;
+        tui.write(view.join('\r\n'));
+        var atEnd = top >= last && total > 0;
+        var pct = total === 0 ? 100 : Math.min(100, Math.round((top + h) / total * 100));
+        tui.write(cup(0, tui.rows - 1) + (atEnd ? DIM + '(END)' + RESET : DIM + '--More-- ' + pct + '%' + RESET));
+        return { atEnd: atEnd, pageH: h, last: last };
+      };
+      var guard = function (e) { if (e.ctrlKey && (e.key === 'd' || e.key === 'u')) { e.preventDefault(); } };
+      window.addEventListener('keydown', guard, true);
+      var st = draw();
+      return new Promise(function (done) {
+        var off = tui.onKey(function (ev) {
+          var k = ev.domEvent;
+          if (k.ctrlKey) {
+            if (k.key === 'd' || k.key === 'D') { top = Math.min(top + 10, st.last); }
+            else if (k.key === 'u' || k.key === 'U') { top = Math.max(top - 10, 0); }
+            else { return; }
+            st = draw(); return;
+          }
+          var key = k.key;
+          if (key === 'q' || key === 'Escape') { off(); done(); return; }
+          if (key === ' ' || key === 'PageDown' || key === 'f') {
+            if (st.atEnd) { off(); done(); return; }
+            top = Math.min(top + st.pageH, st.last);
+          }
+          else if (key === 'b' || key === 'PageUp') { top = Math.max(top - st.pageH, 0); }
+          else if (key === 'ArrowDown' || key === 'j' || key === 'Enter') { top = Math.min(top + 1, st.last); }
+          else if (key === 'ArrowUp' || key === 'k') { top = Math.max(top - 1, 0); }
+          else if (key === 'g') { top = 0; }
+          else if (key === 'G') { top = st.last; }
+          else { return; }
+          st = draw();
+        });
+      }).then(function () {
+        window.removeEventListener('keydown', guard, true);
+        tui.write(cup(0, shown) + '\x1b[0J');
+        tui.release();
+      });
+    }
+
+    var COMMANDS = [
+      { name: 'ls', description: 'list directory contents: ls [dir]', run: function (ctx, argv) {
+        var p = argv[1] || '.', entries = ctx.listDir(p);
+        if (!entries) { ctx.stdout.print('ls: ' + p + ': not a directory'); return; }
+        if (!entries.length) { ctx.stdout.print('(empty)'); return; }
+        entries.forEach(function (e) { ctx.stdout.print('  ' + (e.dir ? STYLE.dir + e.name + '/' + RESET : e.name)); });
+      } },
+      { name: 'cat', description: 'print documents: cat <path> [path...]', run: function (ctx, argv) {
+        var files = argv.slice(1);
+        if (!files.length) { ctx.stdout.print('usage: cat <path> [path...]'); return; }
+        files.forEach(function (f) {
+          var t = docText(ctx, f);
+          if (t === null) { ctx.stdout.print('cat: ' + f + ': no such file'); return; }
+          ctx.stdout.write(t);
+        });
+      } },
+      { name: 'head', description: 'first lines: head [-n N | -N] [path...]', run: function (ctx, argv) {
+        var o = parseN(argv), ins = inputs(ctx, o.files, 'head'), many = ins.length > 1;
+        ins.forEach(function (i) { if (many) { ctx.stdout.print('==> ' + i.name + ' <=='); } ctx.stdout.write(fromLines(toLines(i.text).slice(0, o.n))); });
+      } },
+      { name: 'tail', description: 'last lines: tail [-n N | -N] [path...]', run: function (ctx, argv) {
+        var o = parseN(argv), ins = inputs(ctx, o.files, 'tail'), many = ins.length > 1;
+        ins.forEach(function (i) { if (many) { ctx.stdout.print('==> ' + i.name + ' <=='); } ctx.stdout.write(fromLines(toLines(i.text).slice(-o.n))); });
+      } },
+      { name: 'grep', description: 'lines matching a pattern: grep <pattern> [path...]', run: function (ctx, argv) {
+        var args = argv.slice(1).filter(function (a) { return a.indexOf('-') !== 0; }), pat = args[0];
+        if (!pat) { ctx.stdout.print('usage: grep <pattern> [path...]'); return; }
+        var re; try { re = new RegExp(pat); } catch (e) { re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); }
+        var ins = inputs(ctx, args.slice(1), 'grep'), many = ins.length > 1, hits = [];
+        ins.forEach(function (i) { i.text.split('\n').forEach(function (l) { if (re.test(stripAnsi(l))) { hits.push(many ? i.name + ':' + l : l); } }); });
+        if (hits.length) { ctx.stdout.print(hits.join('\n')); }
+      } },
+      { name: 'find', description: 'walk the FS: find [path...] [-name GLOB] [-type f|d]', run: function (ctx, argv) {
+        var starts = [], name = null, type = null;
+        for (var i = 1; i < argv.length; i++) {
+          var a = argv[i];
+          if (a === '-name') { var g = argv[++i]; if (g) { name = globToRegExp(g); } }
+          else if (a === '-type') { var t = argv[++i]; if (t === 'f' || t === 'd') { type = t; } }
+          else if (a.indexOf('-') !== 0) { starts.push(a); }
+        }
+        if (!starts.length) { starts = ['.']; }
+        var out = [];
+        var keep = function (disp, isDir) {
+          if (type && ((type === 'f') === isDir)) { return; }
+          if (name && !name.test(disp.split('/').pop() || disp)) { return; }
+          out.push(disp);
+        };
+        starts.forEach(function (s) {
+          var p = resolvePath(s, ctx.cwd), isDir = isDirPath(p, ctx);
+          if (!isDir && !isFilePath(p, ctx)) { ctx.stdout.print('find: ' + s + ': no such file or directory'); return; }
+          var disp = s.replace(/\/+$/, '') || '/';
+          keep(disp, isDir);
+          if (isDir) { var items = []; walk(p, disp, ctx, items); items.forEach(function (it) { keep(it.disp, it.dir); }); }
+        });
+        if (out.length) { ctx.stdout.print(out.join('\n')); }
+      } },
+      { name: 'tree', description: 'draw the FS as a tree: tree [path]', run: function (ctx, argv) {
+        var s = argv[1] || '.', p = resolvePath(s, ctx.cwd);
+        if (!isDirPath(p, ctx)) { ctx.stdout.print('tree: ' + s + ': not a directory'); return; }
+        var lines = [s.replace(/\/+$/, '') || '/'], count = { dirs: 0, files: 0 };
+        var rec = function (path, prefix) {
+          var entries = dirEntries(path, ctx);
+          entries.forEach(function (e, i) {
+            var last = i === entries.length - 1, branch = last ? '└── ' : '├── ', next = last ? '    ' : '│   ';
+            lines.push(STYLE.border + prefix + branch + RESET + (e.dir ? STYLE.dir + e.name + '/' + RESET : e.name));
+            if (e.dir) { count.dirs++; rec(path === '' ? e.name : path + '/' + e.name, prefix + next); } else { count.files++; }
+          });
+        };
+        rec(p, '');
+        lines.push('');
+        lines.push(DIM + count.dirs + ' director' + (count.dirs === 1 ? 'y' : 'ies') + ', ' + count.files + ' file' + (count.files === 1 ? '' : 's') + RESET);
+        ctx.stdout.print(lines.join('\n'));
+      } },
+      { name: 'more', description: 'page a document or stdin: more [path]', run: function (ctx, argv) {
+        var p = argv[1], text = null;
+        if (p) { text = docText(ctx, p); if (text === null) { ctx.stdout.print('more: ' + p + ': no such file'); return; } }
+        else if (ctx.stdin) { text = ctx.stdin; }
+        if (text === null) { ctx.stdout.print('usage: more [path]'); return; }
+        if (!ctx.tty) { ctx.stdout.write(text); return; }
+        return pager(ctx, text);
+      } },
+      { name: 'cd', description: 'change directory: cd <dir>', builtin: true, run: function (ctx, argv) {
+        var err = ctx.chdir(argv[1] || '/'); if (err) { ctx.stdout.print('cd: ' + err); }
+      } },
+      { name: 'pwd', description: 'print the working directory', builtin: true, run: function (ctx) {
+        ctx.stdout.print(ctx.cwd === '' ? '/' : '/' + ctx.cwd);
+      } },
+      { name: 'wc', description: 'count lines/words/bytes from stdin: wc [-lwc]', run: function (ctx, argv) {
+        var s = ctx.stdin, flag = argv.slice(1).filter(function (a) { return /^-[lwc]+$/.test(a); })[0];
+        var want = function (c) { return !flag || flag.indexOf(c) >= 0; };
+        var l = (s.match(/\n/g) || []).length, w = s.trim().split(/\s+/).filter(Boolean).length, out = [];
+        if (want('l')) { out.push(String(l)); } if (want('w')) { out.push(String(w)); } if (want('c')) { out.push(String(s.length)); }
+        ctx.stdout.print(out.join('\t'));
+      } },
+      { name: 'clear', description: 'clear the screen', run: function (ctx) { ctx.term.clear(); } },
+      { name: 'exit', description: 'return to the home page (same as Ctrl-D on an empty line)', run: function (ctx) {
+        ctx.chdir('/'); var home = ctx.resolve('index'); if (home) { return home.run(ctx, ['index']); }
+      } },
+      { name: 'whoami', description: 'who runs this site', run: function (ctx) { ctx.stdout.print('yzhao'); } }
+    ];
+    COMMANDS.push(Object.assign({}, COMMANDS.filter(function (c) { return c.name === 'more'; })[0], { name: 'less', description: 'page a document or stdin: less [path]' }));
+
+    // ------------------------------------------------------------------
+    // Boot.
+    // ------------------------------------------------------------------
+    var host = document.getElementById('term-host'), screen = document.getElementById('term-screen');
+    var hashCmd = function () { return location.hash.replace(/^#/, '').trim(); };
+    var initial = hashCmd() || 'index';
+    var shell;
+    var term = new Term(screen, function (slug) {
+      history.pushState({ cmd: slug }, '', '#' + slug);
+      shell.inject(slug);
+    });
+    var registry = makeRegistry(), store = makeStore(DOCUMENTS);
+    COMMANDS.forEach(function (c) { registry.register(c); });
+    store.all().forEach(function (d) { registry.register(docCommand(d)); });
+    shell = new Shell({ term: term, registry: registry, store: store, initialCommand: initial });
+    window.addEventListener('popstate', function (e) {
+      var cmd = (e.state && e.state.cmd) || hashCmd() || 'index';
+      shell.inject(cmd);
+    });
+    history.replaceState({ cmd: initial }, '', location.pathname + location.search);
+    shell.start();
+
+    var revealed = false;
+    var reveal = function () {
+      if (revealed) { return; }
+      revealed = true;
+      try { term.fit(); } finally { host.classList.add('ready'); term.focus(); }
+    };
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reveal); } else { reveal(); }
+    setTimeout(reveal, 1500);
   })();
   </script>
 </body>
+
 </html>
