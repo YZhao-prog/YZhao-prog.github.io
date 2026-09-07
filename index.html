@@ -67,6 +67,9 @@
      reflow never flashes. Only when JS is present; without it, just render. */
   html.js #term-host { opacity: 0; }
   html.js #term-host.ready { opacity: 1; }
+  /* With JS, the files are printed on demand (click a link or type a command);
+     without it they are simply shown, so the page reads in full either way. */
+  html.js #archive { display: none; }
 
   #term-screen {
     height: 100%;
@@ -165,10 +168,12 @@
     caret-color: var(--fg);
   }
   #cmdline::placeholder { color: transparent; }
-  /* block cursor when the field is empty and unfocused, so the prompt reads as a terminal */
-  #prompt.idle::after { content: "█"; margin-left: -1ch; animation: blink 1.1s steps(1) infinite; }
+  /* block cursor when the field is empty and unfocused, so the prompt reads as a
+     terminal. It hangs off the label, right after the "$", so the input's flex
+     stretch cannot push it to the end of the row. */
+  #prompt.idle label::after { content: " █"; animation: blink 1.1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { #prompt.idle::after { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { #prompt.idle label::after { animation: none; } }
   html:not(.js) #prompt { display: none; }
 
   /* Phones: the banner needs ~35 columns. Tighten the frame so it does not wrap. */
@@ -224,7 +229,10 @@
             <div class="blank"></div>
             <p>Last update: Sat Sep 06 2026</p>
           </section>
+        </main>
 
+        <!-- The files. Hidden when JS is on (printed on demand), shown when it is off. -->
+        <div id="archive">
           <section class="entry" id="experience">
             <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat experience.md</div>
             <div class="out">
@@ -306,8 +314,7 @@
               <p class="skillrow"><b>résumé</b>    <a href="Yang_Zhao_Resume.pdf" target="_blank" rel="noopener">Yang_Zhao_Resume.pdf</a></p>
             </div>
           </section>
-
-        </main>
+        </div>
 
         <form id="prompt" class="idle" autocomplete="off">
           <label for="cmdline"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span></label>
@@ -364,14 +371,19 @@
       entry.innerHTML = '<div class="cmd">' + ps() + esc(cmd) + '</div>' +
         (html ? '<div class="out">' + html + '</div>' : '');
       scrollback.appendChild(entry);
-      screen.scrollTop = screen.scrollHeight;
+      // Bring the command line to the top so a long file reads from its heading.
+      entry.scrollIntoView({ block: 'start' });
     }
-    function sectionHTML(id) {
+    // Snapshot every file's HTML once at startup, so `clear` cannot take a
+    // file with it and every cat prints from a pristine copy.
+    var CONTENT = {};
+    ['bio', 'experience', 'projects', 'skills', 'education', 'contact'].forEach(function (id) {
       var sec = document.getElementById(id);
-      if (!sec) { return ''; }
+      if (!sec) { return; }
       var out = sec.querySelector('.out');
-      return (out || sec).innerHTML;
-    }
+      CONTENT[id] = (out || sec).innerHTML;
+    });
+    function sectionHTML(id) { return CONTENT[id] || ''; }
     function open(url) { window.open(url, '_blank', 'noopener'); }
 
     var HELP =
@@ -477,6 +489,21 @@
       input.focus();
       screen.scrollTop = screen.scrollHeight;
     });
+
+    // Nav links: with JS on, "#experience" prints experience.md instead of jumping.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) { return; }
+      var id = a.getAttribute('href').slice(1);
+      if (!CONTENT[id]) { return; }
+      e.preventDefault();
+      location.replace('#' + id);
+      run('cat ' + id + '.md');
+    });
+    // A deep link such as /#projects prints that file on arrival.
+    if (location.hash && CONTENT[location.hash.slice(1)]) {
+      run('cat ' + location.hash.slice(1) + '.md');
+    }
   })();
   </script>
 </body>
