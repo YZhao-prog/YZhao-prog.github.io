@@ -1,329 +1,483 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yang Zhao — Software Engineer</title>
-<meta name="description" content="Yang Zhao — Software Engineer and M.S. Information Systems student at Northeastern. Previously interned at Splunk. Seeking new-grad software engineering roles.">
-<meta property="og:title" content="Yang Zhao — Software Engineer">
-<meta property="og:description" content="Software engineer and M.S. student at Northeastern. Previously interned at Splunk. Seeking new-grad software engineering roles.">
+<title>~yzhao</title>
+<meta name="description" content="Yang Zhao — backend and storage systems engineer. M.S. Northeastern (Dec 2026), two backend internships at Splunk, author of SharkDB. Seeking new-grad software engineering roles from January 2027.">
+<meta property="og:title" content="~yzhao">
+<meta property="og:description" content="Backend and storage systems engineer. Splunk intern ×2, SharkDB author, M.S. Northeastern Dec 2026.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88' font-family='Georgia,serif'>YZ</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='14' fill='%23fafafa'/><text x='50' y='68' text-anchor='middle' font-size='54' font-family='Menlo,monospace' font-weight='700' fill='%232e3338'>~y</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#f7f5f0; --bg2:#efebe3; --panel:#fffdf8; --border:#e3ddd0;
-    --text:#1d1a15; --muted:#726c60; --faint:#a49d8e;
-    --accent:#9c7a48; --accent-soft:rgba(156,122,72,.10);
-    --serif:'Cormorant Garamond',Georgia,serif;
-    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  :root {
+    color-scheme: light;
+    --bg: #fafafa;
+    --fg: #2e3338;
+    --dim: #6e767d;
+    --border: #d0d7de;
+    --accent: #3b5bcc;
+    --code-bg: #eef0f2;
+    /* CRT overlay tuning — strength of the texture layer over the terminal. */
+    --crt-scan: rgba(0, 0, 0, 0.03);
+    --crt-vignette: rgba(0, 0, 0, 0.13);
   }
-  [data-theme="dark"]{
-    --bg:#14120e; --bg2:#1a1712; --panel:#1c1813; --border:#332c22;
-    --text:#f1ece1; --muted:#a79f8f; --faint:#6f665579;
-    --accent:#cAa066; --accent:#caa068; --accent-soft:rgba(202,160,104,.12);
+
+  * { box-sizing: border-box; }
+
+  /* Zero-size SVG that only hosts <defs> (the smudge filter). Kept out of layout. */
+  .defs-only { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "JetBrains Mono", "Maple Mono", "Fira Code", "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:400;
-    line-height:1.7;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
-  a{color:inherit;text-decoration:none}
-  ::selection{background:var(--accent-soft)}
-  .wrap{max-width:860px;margin:0 auto;padding:0 30px}
-  section{padding:96px 0}
 
-  /* nav */
-  nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);
-    backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-  .nav-in{max-width:860px;margin:0 auto;padding:18px 30px;display:flex;align-items:center;gap:26px}
-  .monogram{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:.08em;margin-right:auto;
-    border:1px solid var(--border);border-radius:50%;width:44px;height:44px;display:grid;place-items:center}
-  .nav-links{display:flex;gap:30px}
-  .nav-links a{color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase;
-    letter-spacing:.18em;transition:color .25s;position:relative}
-  .nav-links a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:1px;
-    background:var(--accent);transition:width .3s}
-  .nav-links a:hover{color:var(--text)}
-  .nav-links a:hover::after{width:100%}
-  .icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);width:38px;height:38px;
-    border-radius:50%;cursor:pointer;font-size:14px;display:grid;place-items:center;transition:border-color .25s}
-  .icon-btn:hover{border-color:var(--accent)}
-  @media(max-width:620px){.nav-links{display:none}}
+  #app {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+  }
 
-  /* kicker label */
-  .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.28em;color:var(--accent);font-weight:600}
+  /* The terminal frame. Capped at ~80 columns; the padding lives here and the
+     content scrolls inside it, like a real terminal window. */
+  #term-host {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    padding: 16px 18px 28px 18px;
+    overflow: hidden;
+    max-width: calc(80ch + 38px);
+    transition: opacity 150ms ease-out;
+  }
+  /* Hidden until web fonts have loaded, then faded in, so the fallback-font
+     reflow never flashes. Only when JS is present; without it, just render. */
+  html.js #term-host { opacity: 0; }
+  html.js #term-host.ready { opacity: 1; }
 
-  /* hero */
-  .hero{padding:110px 0 70px}
-  .avail{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.05em;
-    color:var(--muted);margin-bottom:34px}
-  .dot{width:7px;height:7px;border-radius:50%;background:#5a8f5a;box-shadow:0 0 0 4px rgba(90,143,90,.15)}
-  .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,7vw,68px);line-height:1.05;
-    letter-spacing:-.01em;margin:0}
-  .hero .sig{font-size:15px;font-weight:400;color:var(--muted);margin-top:16px}
-  .intro{margin-top:26px;max-width:560px;color:var(--muted);font-size:16px;font-weight:300}
-  .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:44px}
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 28px;font-size:11px;font-weight:600;
-    text-transform:uppercase;letter-spacing:.16em;border-radius:2px;transition:all .28s;border:1px solid var(--text)}
-  .btn.primary{background:var(--text);color:var(--bg)}
-  .btn.primary:hover{background:transparent;color:var(--text)}
-  .btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
-  .btn.ghost:hover{border-color:var(--text)}
+  #term-screen {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #c0c7cf transparent;
+  }
+  /* The smudge filter goes on the content, not the scroll container, so
+     scrolling does not force the filter to re-run over the whole viewport. */
+  #scrollback, #prompt { filter: url(#crt-smudge); }
+  #term-screen::-webkit-scrollbar { width: 10px; }
+  #term-screen::-webkit-scrollbar-track { background: transparent; }
+  #term-screen::-webkit-scrollbar-thumb { background: #c0c7cf; border-radius: 5px; }
+  #term-screen::-webkit-scrollbar-thumb:hover { background: #a8afb7; }
 
-  /* section heads */
-  .shead{margin-bottom:48px}
-  .shead .num{font-size:11px;letter-spacing:.28em;color:var(--faint);font-weight:600}
-  .shead h2{font-family:var(--serif);font-weight:400;font-size:clamp(36px,6vw,52px);line-height:1;
-    letter-spacing:-.01em;margin-top:10px}
+  /* CRT overlay — a pure visual layer above the terminal. pointer-events:none
+     keeps clicks and selection reaching the content. */
+  #term-host::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 10;
+    background: repeating-linear-gradient(to bottom, var(--crt-scan) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+  }
+  #term-host::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 11;
+    background: radial-gradient(ellipse 120% 120% at 50% 50%, transparent 55%, var(--crt-vignette) 100%);
+  }
 
-  .lead{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.55;color:var(--text);max-width:680px}
-  .body{color:var(--muted);font-size:16px;font-weight:300;max-width:680px}
+  /* ---- markdown-in-a-terminal ---- */
+  p, pre, ul { margin: 0; }
+  a { color: inherit; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--accent); }
+  a:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+  b { font-weight: 700; }
+  i { font-style: italic; }
+  code { background: var(--code-bg); padding: 0 .3ch; border-radius: 2px; }
 
-  /* focus + philosophy */
-  .focus{margin-top:40px}
-  .focus .lbl,.subhead-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.24em;color:var(--accent);
-    font-weight:600;margin-bottom:18px}
-  .focus ul{list-style:none;display:grid;gap:0}
-  .focus li{padding:15px 0;border-top:1px solid var(--border);font-size:15.5px;color:var(--text);
-    display:flex;gap:16px;align-items:baseline}
-  .focus li:last-child{border-bottom:1px solid var(--border)}
-  .focus li i{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:15px;min-width:26px}
-  .principles{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);
-    border:1px solid var(--border);margin-top:22px}
-  @media(max-width:640px){.principles{grid-template-columns:1fr}}
-  .pr{background:var(--bg);padding:26px 24px}
-  .pr b{display:block;font-family:var(--serif);font-size:20px;font-weight:500;margin-bottom:6px}
-  .pr span{color:var(--muted);font-size:14px;font-weight:300}
-  .subhead{margin-top:56px}
+  .h1 { color: var(--accent); font-weight: 700; margin-bottom: 1.5em; }
+  .h1 a { color: var(--accent); }
+  .h2 { color: var(--accent); font-weight: 700; margin: 0 0 .75em; }
+  .banner {
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.15;
+    white-space: pre;
+    margin: 0 0 1.5em;
+    overflow-x: auto;
+  }
+  .quote {
+    border-left: 1px solid var(--fg);
+    padding-left: 2ch;
+    margin: 1.5em 0;
+  }
+  .dim { color: var(--dim); }
+  .blank { height: 1.5em; }
 
-  /* experience */
-  .exp .item{padding:34px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;gap:24px}
-  .exp .item:last-child{border-bottom:1px solid var(--border)}
-  @media(max-width:640px){.exp .item{grid-template-columns:1fr;gap:10px}}
-  .exp .when{font-size:12px;letter-spacing:.05em;color:var(--faint);padding-top:6px}
-  .exp .title{font-family:var(--serif);font-size:25px;font-weight:500}
-  .exp .co{color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.12em;margin-top:4px;font-weight:500}
-  .exp ul{margin:16px 0 0;padding-left:0;list-style:none}
-  .exp li{margin-bottom:9px;color:var(--muted);font-size:15px;font-weight:300;padding-left:20px;position:relative}
-  .exp li::before{content:"—";position:absolute;left:0;color:var(--accent)}
+  /* lists print the way markdown does in a terminal */
+  ul { list-style: none; padding-left: 4ch; }
+  li { position: relative; margin: 0 0 .35em; }
+  li::before { content: "•"; position: absolute; left: -2ch; }
+  ul.tight li { margin: 0; }
 
-  /* projects */
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  @media(max-width:680px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:30px 28px;
-    transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
-  .card:hover{transform:translateY(-5px);box-shadow:0 24px 50px -24px rgba(60,45,20,.25)}
-  .card h3{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.01em}
-  .card .stack{margin:14px 0 16px;display:flex;flex-wrap:wrap;gap:8px}
-  .tag{font-size:11px;letter-spacing:.04em;padding:4px 11px;border:1px solid var(--border);
-    border-radius:999px;color:var(--muted)}
-  .card ul{margin:4px 0 0;padding-left:0;list-style:none}
-  .card li{margin-bottom:8px;color:var(--muted);font-size:14px;font-weight:300;padding-left:18px;position:relative}
-  .card li::before{content:"·";position:absolute;left:4px;color:var(--accent);font-weight:700}
-  .card p{color:var(--muted);font-size:14.5px;font-weight:300}
-  .card .links{margin-top:auto;padding-top:20px;display:flex;gap:22px}
-  .card .links a{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);
-    font-weight:600;position:relative}
-  .card .links a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--accent);transition:width .3s}
-  .card .links a:hover::after{width:100%}
+  /* one "entry" = a command line followed by its output */
+  .entry { margin-bottom: 1.5em; }
+  .cmd { margin-bottom: .75em; }
+  .ps { color: var(--accent); font-weight: 700; }
+  .ps .path { color: var(--accent); font-weight: 400; }
+  .ps .sigil { color: var(--fg); font-weight: 400; }
+  .role { margin-bottom: .35em; }
+  .role + ul { margin-bottom: 1.1em; }
+  .skillrow { padding-left: 4ch; text-indent: -4ch; margin-bottom: .35em; }
+  .tree { white-space: pre; }
 
-  /* skills */
-  .skills{display:grid;grid-template-columns:1fr 1fr;gap:44px 60px}
-  @media(max-width:640px){.skills{grid-template-columns:1fr;gap:32px}}
-  .skillrow h4{font-family:var(--serif);font-size:19px;font-weight:500;margin-bottom:14px;
-    padding-bottom:12px;border-bottom:1px solid var(--border)}
-  .skillrow p{color:var(--muted);font-size:15px;font-weight:300;line-height:2}
+  /* the live prompt */
+  #prompt { display: flex; align-items: baseline; gap: 1ch; margin-top: .25em; }
+  #prompt label { white-space: nowrap; }
+  #cmdline {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    outline: none;
+    caret-color: var(--fg);
+  }
+  #cmdline::placeholder { color: transparent; }
+  /* block cursor when the field is empty and unfocused, so the prompt reads as a terminal */
+  #prompt.idle::after { content: "█"; margin-left: -1ch; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #prompt.idle::after { animation: none; } }
+  html:not(.js) #prompt { display: none; }
 
-  /* education */
-  .edu .row{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;
-    gap:20px;flex-wrap:wrap;align-items:baseline}
-  .edu .row:last-child{border-bottom:1px solid var(--border)}
-  .edu b{font-family:var(--serif);font-size:23px;font-weight:500;display:block}
-  .edu .deg{color:var(--muted);font-size:14.5px;font-weight:300;margin-top:4px}
-  .edu .when{font-size:12px;letter-spacing:.05em;color:var(--faint);white-space:nowrap}
-
-  footer{border-top:1px solid var(--border);padding:70px 30px;text-align:center}
-  footer .fk{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--text)}
-  footer a.mail{font-family:var(--serif);font-size:32px;color:var(--accent);display:inline-block;margin-top:12px;
-    border-bottom:1px solid transparent;transition:border-color .3s}
-  footer a.mail:hover{border-color:var(--accent)}
-  footer .fsocial{margin-top:26px;display:flex;gap:26px;justify-content:center}
-  footer .fsocial a{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}
-  footer .fsocial a:hover{color:var(--text)}
-  footer .cr{margin-top:34px;font-size:12px;color:var(--faint)}
-
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
-  .reveal.in{opacity:1;transform:none}
+  /* Phones: the banner needs ~35 columns. Tighten the frame so it does not wrap. */
+  @media (max-width: 640px) {
+    #app { padding: 4px; }
+    #term-host { padding: 12px 8px 22px 8px; border-radius: 6px; }
+    body { font-size: 13px; }
+    .banner { font-size: 11.5px; }
+    ul { padding-left: 3ch; }
+    .skillrow { padding-left: 3ch; text-indent: -3ch; }
+  }
 </style>
 </head>
+
 <body>
+  <!-- CRT pixel misalignment: a smooth feTurbulence field drives feDisplacementMap
+       at a small scale, so pixels shift a hair organically. Text stays sharp; it
+       reads as a subtle painted misalignment rather than a blur. -->
+  <svg class="defs-only" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="crt-smudge" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" seed="5" result="noise"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+      </filter>
+    </defs>
+  </svg>
 
-<nav>
-  <div class="nav-in">
-    <a class="monogram" href="#" title="Yang Zhao">YZ</a>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Work</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-    </div>
-    <button class="icon-btn" id="theme" title="Toggle theme">☾</button>
-  </div>
-</nav>
+  <div id="app">
+    <div id="term-host">
+      <div id="term-screen">
+        <main id="scrollback" aria-live="polite">
 
-<header class="hero wrap">
-  <div class="avail"><span class="dot"></span> Open to New Grad Software Engineer roles · Available January 2027</div>
-  <h1>Hi, I'm Yang</h1>
-  <p class="sig">Software Engineer · M.S. student at Northeastern University</p>
-  <p class="intro">Graduating December 2026, with software engineering internship experience at
-    Splunk. I work across the stack, with a soft spot for backend. Currently looking for
-    new-grad software engineering roles.</p>
-  <div class="cta">
-    <a class="btn primary" href="mailto:yangzhao200124@gmail.com">Get in touch</a>
-    <a class="btn ghost" href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
-    <a class="btn ghost" href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">LinkedIn</a>
-    <a class="btn ghost" href="https://github.com/YZhao-prog" target="_blank" rel="noopener">GitHub</a>
-  </div>
-</header>
+          <section class="entry" id="bio">
+            <p class="h1"># Yang Zhao <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
+<pre class="banner" aria-label="Yang Zhao">
+ █ █ █▀█ █▀█ █▀▀   ▀▀█ █ █ █▀█ █▀█
+  █  █▀█ █ █ █ █   ▄▀  █▀█ █▀█ █ █
+  ▀  ▀ ▀ ▀ ▀ ▀▀▀   ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀
+</pre>
+            <p><b>Backend Software Engineer</b> · <a href="https://www.northeastern.edu/" rel="noopener">Northeastern University</a> · M.S., graduating Dec 2026<br>
+               <b>Previously</b> · <a href="https://www.splunk.com/" rel="noopener">Splunk</a> (Cisco) · Backend Software Engineer Intern, 2025 &amp; 2026</p>
+            <div class="quote">
+              <p>👤 <a href="#bio">bio</a> · 💼 <a href="#experience">experience</a> · 🛠 <a href="#projects">projects</a> · 📄 <a href="Yang_Zhao_Resume.pdf" target="_blank" rel="noopener">résumé</a><br>
+                 🐙 <a href="https://github.com/YZhao-prog" rel="noopener">GitHub</a> · 🔗 <a href="https://linkedin.com/in/yang-zhao-48b12431a" rel="noopener">LinkedIn</a> · 🎯 <a href="https://yzhao-prog.github.io/newgrad-search/" rel="noopener">job tracker</a></p>
+              <div class="blank"></div>
+              <p>Boston, MA<br>Open to new-grad software engineering roles · available January 2027</p>
+            </div>
+            <p><i>I build storage and distributed systems in C++ and Rust: caches, LSM-trees, consensus, and the tests that prove they hold.</i></p>
+            <div class="blank"></div>
+            <ul class="tight">
+              <li>This page doubles as a shell.<br>Try: <code>help</code>, <code>exp</code>, <code>cat projects.md</code>.</li>
+            </ul>
+            <div class="blank"></div>
+            <p>Last update: Sat Sep 06 2026</p>
+          </section>
 
-<section id="about" class="wrap reveal">
-  <div class="shead"><span class="num">01 — ABOUT</span><h2>Profile</h2></div>
-  <p class="lead">I'm a software engineer who likes building things well — reliable, thoughtfully
-    designed, and made to last. I work across the stack and enjoy going deep when a problem calls for it.</p>
-  <p class="body" style="margin-top:22px">I've interned at Splunk, building systems from the ground
-    up to understand how they really work. Currently finishing my M.S. at Northeastern (GPA 3.8), after a CS
-    degree from CUHK-Shenzhen. Lately I've spent a lot of time on backend and systems problems, but I'm happy
-    anywhere I can build something meaningful.</p>
+          <section class="entry" id="experience">
+            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat experience.md</div>
+            <div class="out">
+              <p class="h2">## Experience</p>
+              <p class="role"><b>Splunk</b> · Backend Software Engineer Intern · San Jose, CA · <span class="dim">Jun–Sep 2026</span></p>
+              <ul>
+                <li>Designed and implemented a C++ cache management system for a Raft-coordinated distributed search cluster, preserving search result availability under bounded local storage.</li>
+                <li>Built an in-memory storage tracker that keeps a running total of cache disk usage in a hash map keyed by artifact directory, reading each artifact's size from its status-file metadata in O(1) instead of rescanning directories.</li>
+                <li>Designed size-based eviction that reclaims artifacts in LRU order by last-use timestamp until the tracked total falls below a configurable ceiling, preventing disk-full failures.</li>
+                <li>Engineered an artifact offloading pipeline across concurrent workers, AWS S3, and a PostgreSQL-backed KV store, sustaining 500 concurrent offloads with zero metadata inconsistencies or duplicate uploads.</li>
+                <li>Validated eviction through a soak test of 125K+ searches with before/after rollout metrics, holding local disk at its 4 GiB ceiling on 100% of cycles with zero errors or crashes.</li>
+              </ul>
+              <p class="role"><b>Splunk</b> · Backend Software Engineer Intern · Boston, MA · <span class="dim">Sep–Dec 2025</span></p>
+              <ul>
+                <li>Built a cross-node artifact sharing system in C++ for a Raft-coordinated search cluster, persisting results to AWS S3 so any node can serve them via REST APIs.</li>
+                <li>Shipped remote artifact storage behind a feature flag, supporting its staged rollout from internal clusters to the full production fleet.</li>
+                <li>Optimized the artifact storage pipeline with asynchronous uploads, keeping search latency unaffected under high write volume at a 0.62% storage-cost impact.</li>
+                <li>Delivered zero-downtime rolling upgrades by designing a backward-compatible storage schema.</li>
+                <li>Created a functional test suite for CI/CD regression coverage and load-tested the feature at a production scale of 600K+ daily searches with zero failures.</li>
+              </ul>
+            </div>
+          </section>
 
-  <div class="focus">
-    <div class="lbl">Areas I've gone deep on</div>
-    <ul>
-      <li><i>i.</i> Distributed consensus &amp; replication — Raft</li>
-      <li><i>ii.</i> Consistency &amp; concurrency — Linearizability, MVCC</li>
-      <li><i>iii.</i> Storage engines — LSM-tree, compaction, caching</li>
-      <li><i>iv.</i> Backend reliability &amp; fault tolerance</li>
-    </ul>
-  </div>
-</section>
+          <section class="entry" id="projects">
+            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat projects.md</div>
+            <div class="out">
+              <p class="h2">## Projects</p>
+              <p class="role"><b><a href="https://github.com/YZhao-prog/SharkDB" rel="noopener">SharkDB</a></b> — SQL database engine · <span class="dim">Rust · 138 stars</span></p>
+              <ul>
+                <li>Hand-written parser, rule-based optimizer (constant folding, predicate pushdown, primary-key point-lookup rewriting, hash-join selection) and a parallel execution engine, ~2× on 200K-row analytical queries.</li>
+                <li>Three interchangeable storage engines behind one trait: in-memory B-tree, Bitcask-style log, and a custom LSM-tree with WAL, SSTables, Bloom filters and leveled compaction; crash recovery ~16× faster than full-log replay.</li>
+                <li>MVCC with snapshot isolation and optimistic concurrency control, verified against dirty, non-repeatable and phantom reads.</li>
+                <li>Optional gRPC service (tonic + Protocol Buffers): unary and server-streaming execution with client-controlled batch sizes, session lifecycle, and engine errors mapped to status codes by fault type. 13 integration tests over real sockets.</li>
+              </ul>
+              <p class="role"><b><a href="https://github.com/YZhao-prog/raft-kv" rel="noopener">raft-kv</a></b> — distributed key-value store · <span class="dim">Go</span></p>
+              <ul>
+                <li>Full Raft consensus: leader election, log replication, persistence, snapshotting and crash recovery under partitions.</li>
+                <li>Linearizable KV service with request dedup and at-most-once semantics, verified with linearizability testing.</li>
+                <li>Sharded store with a replicated shard controller supporting dynamic migration and rebalancing.</li>
+              </ul>
+              <p class="role"><b><a href="https://yzhao-prog.github.io/newgrad-search/" rel="noopener">newgrad-search</a></b> — new-grad job tracker · <span class="dim">HTML · <a href="https://github.com/YZhao-prog/newgrad-search" rel="noopener">source</a></span></p>
+              <ul>
+                <li>Aggregates new-grad postings across companies with per-company tiers and sponsorship flags.</li>
+              </ul>
+            </div>
+          </section>
 
-<section id="experience" class="wrap reveal">
-  <div class="shead"><span class="num">02 — EXPERIENCE</span><h2>Where I've worked</h2></div>
-  <div class="exp">
-    <div class="item">
-      <div class="when">Jun — Sep 2026<br>San Jose, CA</div>
-      <div>
-        <div class="title">Backend Software Engineer Intern</div>
-        <div class="co">Splunk</div>
-        <ul>
-          <li>Designed a C++ cache management system for a Raft-coordinated distributed search cluster, with size-aware eviction that keeps local disk under a configurable ceiling.</li>
-          <li>Built an incremental storage tracker, replacing full-directory scans with O(1) disk-usage accounting.</li>
-          <li>Engineered an artifact offloading pipeline across concurrent workers, AWS S3, and a PostgreSQL-backed KV store, sustaining 500 concurrent offloads with zero metadata inconsistencies or duplicate uploads.</li>
-          <li>Validated eviction through a soak test of 125K+ searches, holding local disk at its 4 GiB ceiling on 100% of cycles with zero errors or crashes.</li>
-        </ul>
+          <section class="entry" id="skills">
+            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat skills.md</div>
+            <div class="out">
+              <p class="h2">## Skills</p>
+              <p class="skillrow"><b>Languages</b>      C++ · Rust · Go · Java · Python · SQL · TypeScript · JavaScript</p>
+              <p class="skillrow"><b>Backend</b>        gRPC · Protocol Buffers · REST APIs · Spring Boot · Django · Node.js / Express</p>
+              <p class="skillrow"><b>Data</b>           PostgreSQL · MySQL · MongoDB · Redis · RocksDB · Elasticsearch · Kafka · RabbitMQ</p>
+              <p class="skillrow"><b>Infra</b>          AWS (EC2 · S3 · Lambda · RDS) · Docker · Kubernetes · Helm · Jenkins · CI/CD · Linux · CMake</p>
+              <p class="skillrow"><b>Observability</b>  Splunk · OpenTelemetry · Datadog · Prometheus · Grafana</p>
+              <p class="skillrow"><b>Frontend</b>       React · Next.js · Angular</p>
+            </div>
+          </section>
+
+          <section class="entry" id="education">
+            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat education.md</div>
+            <div class="out">
+              <p class="h2">## Education</p>
+              <p class="role"><b>Northeastern University</b> · M.S. Information Systems · GPA 3.8 / 4.0 · Boston, MA · <span class="dim">Sep 2024 – Dec 2026</span></p>
+              <ul><li>Linux/UNIX Systems · Data Structures · Algorithms · Object-Oriented Design · High-Performance Computing for AI</li></ul>
+              <p class="role"><b>The Chinese University of Hong Kong, Shenzhen</b> · B.Eng. Computer Science and Engineering · <span class="dim">Sep 2020 – Jun 2024</span></p>
+              <ul><li>Database Systems · Distributed and Parallel Computing · Operating Systems · Computer Architecture · Compilers · Computer Networks</li></ul>
+            </div>
+          </section>
+
+          <section class="entry" id="contact">
+            <div class="cmd"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> cat contact.md</div>
+            <div class="out">
+              <p class="h2">## Contact</p>
+              <p class="skillrow"><b>email</b>     <a href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a></p>
+              <p class="skillrow"><b>github</b>    <a href="https://github.com/YZhao-prog" rel="noopener">github.com/YZhao-prog</a></p>
+              <p class="skillrow"><b>linkedin</b>  <a href="https://linkedin.com/in/yang-zhao-48b12431a" rel="noopener">linkedin.com/in/yang-zhao-48b12431a</a></p>
+              <p class="skillrow"><b>résumé</b>    <a href="Yang_Zhao_Resume.pdf" target="_blank" rel="noopener">Yang_Zhao_Resume.pdf</a></p>
+            </div>
+          </section>
+
+        </main>
+
+        <form id="prompt" class="idle" autocomplete="off">
+          <label for="cmdline"><span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span></label>
+          <input id="cmdline" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="shell command" placeholder="help">
+        </form>
       </div>
     </div>
-    <div class="item">
-      <div class="when">Sep — Dec 2025<br>Boston, MA</div>
-      <div>
-        <div class="title">Backend Software Engineer Intern</div>
-        <div class="co">Splunk</div>
-        <ul>
-          <li>Built a cross-node artifact sharing system in C++ for a Raft-coordinated search cluster, persisting results to AWS S3 so any node can serve them via REST APIs.</li>
-          <li>Shipped remote artifact storage behind a feature flag, supporting its staged rollout from internal clusters to the full production fleet.</li>
-          <li>Optimized the artifact storage pipeline with asynchronous uploads, keeping search latency unaffected under high write volume at a 0.62% storage-cost impact.</li>
-          <li>Delivered zero-downtime rolling upgrades by designing a backward-compatible storage schema.</li>
-          <li>Built a pytest suite for CI/CD regression coverage and load-tested the feature at a production scale of 600K+ daily searches with zero failures.</li>
-        </ul>
-      </div>
-    </div>
   </div>
-</section>
 
-<section id="projects" class="wrap reveal">
-  <div class="shead"><span class="num">03 — SELECTED WORK</span><h2>Things I've built</h2></div>
-  <div class="grid">
-    <div class="card">
-      <h3>SharkDB — SQL Database Engine</h3>
-      <div class="stack"><span class="tag">Rust</span><span class="tag">SQL</span><span class="tag">LSM-tree</span><span class="tag">MVCC</span></div>
-      <ul>
-        <li>Hand-written parser, rule-based optimizer (predicate pushdown, PK point-lookup rewriting, hash-join selection) &amp; parallel execution — ~2× on 200K-row analytical queries.</li>
-        <li>Three interchangeable storage engines (in-memory, Bitcask-style log, LSM-tree) behind one trait — ~500K QPS storage point reads, ~200K QPS end-to-end SQL point lookups.</li>
-        <li>MVCC transactions with snapshot isolation &amp; optimistic concurrency control, verified against dirty / non-repeatable / phantom reads.</li>
-        <li>Custom LSM-tree engine: WAL + memtables, SSTables with Bloom filters, leveled compaction — crash recovery ~16× faster than full-log replay.</li>
-      </ul>
-      <div class="links"><a href="https://github.com/YZhao-prog/SharkDB" target="_blank" rel="noopener">View on GitHub →</a></div>
-    </div>
-    <div class="card">
-      <h3>KV Store with Raft</h3>
-      <div class="stack"><span class="tag">Go</span><span class="tag">RPC</span><span class="tag">MapReduce</span></div>
-      <ul>
-        <li>Full Raft consensus: leader election, log replication, persistence, snapshotting &amp; crash recovery under partitions.</li>
-        <li>Linearizable KV service with request dedup &amp; at-most-once semantics, verified with linearizability testing.</li>
-        <li>Sharded store with replicated Shard Controller supporting dynamic migration &amp; rebalancing.</li>
-        <li>Fault-tolerant MapReduce framework with coordinator &amp; distributed workers.</li>
-      </ul>
-      <div class="links"><a href="https://github.com/YZhao-prog/raft-kv" target="_blank" rel="noopener">View on GitHub →</a></div>
-    </div>
-    <div class="card">
-      <h3>New Grad Job Search</h3>
-      <div class="stack"><span class="tag">JavaScript</span><span class="tag">GitHub Pages</span></div>
-      <p>A self-updating tool that merges new-grad tech listings from three community repos, ranks
-        big-tech first, and adds salary &amp; posted-date filters — all in a single static file.</p>
-      <div class="links">
-        <a href="https://yzhao-prog.github.io/newgrad-search/" target="_blank" rel="noopener">Live →</a>
-        <a href="https://github.com/YZhao-prog/newgrad-search" target="_blank" rel="noopener">Code →</a>
-      </div>
-    </div>
-  </div>
-</section>
+  <script>
+  (function () {
+    document.documentElement.classList.add('js');
 
-<section id="skills" class="wrap reveal">
-  <div class="shead"><span class="num">04 — TOOLKIT</span><h2>Skills</h2></div>
-  <div class="skills">
-    <div class="skillrow"><h4>Languages</h4><p>C++ · Rust · Go · Java · Python · SQL · TypeScript · JavaScript · HTML / CSS</p></div>
-    <div class="skillrow"><h4>Backend</h4><p>Spring Boot · Spring Cloud · Django · Node.js / Express · gRPC · Protocol Buffers · REST APIs</p></div>
-    <div class="skillrow"><h4>Databases &amp; Messaging</h4><p>MySQL · PostgreSQL · MongoDB · Redis · RocksDB · Elasticsearch · Kafka · RabbitMQ</p></div>
-    <div class="skillrow"><h4>Cloud &amp; Infrastructure</h4><p>AWS (EC2 · S3 · Lambda · RDS) · Docker · Kubernetes · Helm · Jenkins · CI/CD · Linux · CMake</p></div>
-    <div class="skillrow"><h4>Frontend</h4><p>React · Next.js · Angular</p></div>
-    <div class="skillrow"><h4>Observability</h4><p>Splunk · OpenTelemetry · Datadog · Prometheus · Grafana</p></div>
-  </div>
-</section>
+    var host = document.getElementById('term-host');
+    var screen = document.getElementById('term-screen');
+    var scrollback = document.getElementById('scrollback');
+    var form = document.getElementById('prompt');
+    var input = document.getElementById('cmdline');
 
-<section id="education" class="wrap reveal">
-  <div class="shead"><span class="num">05 — EDUCATION</span><h2>Studies</h2></div>
-  <div class="edu">
-    <div class="row"><div><b>Northeastern University</b><div class="deg">M.S. Information Systems · GPA 3.8 / 4.0 · Boston, MA</div></div><div class="when">Sep 2024 — Dec 2026</div></div>
-    <div class="row"><div><b>CUHK, Shenzhen</b><div class="deg">B.Eng. Computer Science &amp; Engineering</div></div><div class="when">Sep 2020 — Jun 2024</div></div>
-    <div class="row"><div><b>UC Berkeley</b><div class="deg">Summer Session · CS 61A · GPA 4.0</div></div><div class="when">May — Aug 2022</div></div>
-  </div>
-</section>
+    // Reveal once the web font is in, so the fallback-font reflow never flashes.
+    var reveal = function () { host.classList.add('ready'); };
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reveal); }
+    setTimeout(reveal, 1200);
 
-<footer>
-  <div class="fk">Let's build something reliable.</div>
-  <a class="mail" href="mailto:yangzhao200124@gmail.com">yangzhao200124@gmail.com</a>
-  <div class="fsocial">
-    <a href="https://linkedin.com/in/yang-zhao-48b12431a" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://github.com/YZhao-prog" target="_blank" rel="noopener">GitHub</a>
-    <a href="Yang_Zhao_Resume.pdf" target="_blank">Résumé</a>
-  </div>
-  <div class="cr">© <span id="yr"></span> Yang Zhao</div>
-</footer>
+    // ---- the "filesystem": each section is a file the visitor can cat ----
+    var FILES = {
+      'bio.md': 'bio', 'experience.md': 'experience', 'projects.md': 'projects',
+      'skills.md': 'skills', 'education.md': 'education', 'contact.md': 'contact',
+      'resume.pdf': null
+    };
+    var ALIAS = {
+      bio: 'bio.md', exp: 'experience.md', experience: 'experience.md',
+      projects: 'projects.md', proj: 'projects.md', skills: 'skills.md',
+      edu: 'education.md', education: 'education.md', contact: 'contact.md'
+    };
+    var LINKS = {
+      github: 'https://github.com/YZhao-prog',
+      linkedin: 'https://linkedin.com/in/yang-zhao-48b12431a',
+      tracker: 'https://yzhao-prog.github.io/newgrad-search/',
+      sharkdb: 'https://github.com/YZhao-prog/SharkDB',
+      raft: 'https://github.com/YZhao-prog/raft-kv',
+      resume: 'Yang_Zhao_Resume.pdf'
+    };
 
-<script>
-  const t=document.getElementById('theme'), root=document.documentElement;
-  const saved=localStorage.getItem('theme');
-  if(saved==='dark'){root.setAttribute('data-theme','dark');t.textContent='☀';}
-  t.onclick=()=>{
-    const dark=root.getAttribute('data-theme')==='dark';
-    if(dark){root.removeAttribute('data-theme');t.textContent='☾';localStorage.setItem('theme','light');}
-    else{root.setAttribute('data-theme','dark');t.textContent='☀';localStorage.setItem('theme','dark');}
-  };
-  document.getElementById('yr').textContent=new Date().getFullYear();
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.08});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-</script>
+    function esc(s) {
+      return s.replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; });
+    }
+    function ps() {
+      return '<span class="ps">yzhao<span class="sigil">:</span><span class="path">~</span><span class="sigil">$</span></span> ';
+    }
+    function print(cmd, html) {
+      var entry = document.createElement('section');
+      entry.className = 'entry';
+      entry.innerHTML = '<div class="cmd">' + ps() + esc(cmd) + '</div>' +
+        (html ? '<div class="out">' + html + '</div>' : '');
+      scrollback.appendChild(entry);
+      screen.scrollTop = screen.scrollHeight;
+    }
+    function sectionHTML(id) {
+      var sec = document.getElementById(id);
+      if (!sec) { return ''; }
+      var out = sec.querySelector('.out');
+      return (out || sec).innerHTML;
+    }
+    function open(url) { window.open(url, '_blank', 'noopener'); }
+
+    var HELP =
+      '<div class="tree">' +
+      'help                 this list\n' +
+      'ls                   list files\n' +
+      'cat &lt;file&gt;           print a file, e.g. cat experience.md\n' +
+      'bio | exp | projects | skills | edu | contact\n' +
+      '                     shortcuts for the files above\n' +
+      'resume               open the PDF résumé\n' +
+      'open &lt;name&gt;          github · linkedin · tracker · sharkdb · raft\n' +
+      'tree                 show the file tree\n' +
+      'clear                clear the screen\n' +
+      'whoami · pwd · date · echo\n' +
+      '</div>';
+
+    var COMMANDS = {
+      help: function () { return HELP; },
+      ls: function () { return Object.keys(FILES).join('  '); },
+      tree: function () {
+        return '<div class="tree">.\n' +
+          Object.keys(FILES).map(function (f, i, a) { return (i === a.length - 1 ? '└── ' : '├── ') + f; }).join('\n') +
+          '</div>';
+      },
+      cat: function (args) {
+        if (!args.length) { return 'usage: cat &lt;file&gt;'; }
+        var name = ALIAS[args[0]] || args[0];
+        if (name === 'resume.pdf') { open(LINKS.resume); return 'resume.pdf: binary file — opening in a new tab'; }
+        if (!(name in FILES)) { return 'cat: ' + esc(args[0]) + ': No such file'; }
+        document.title = '~yzhao: ' + name.replace(/\.md$/, '');
+        return sectionHTML(FILES[name]);
+      },
+      resume: function () { open(LINKS.resume); return 'opening Yang_Zhao_Resume.pdf'; },
+      cv: function () { return COMMANDS.resume(); },
+      open: function (args) {
+        var key = (args[0] || '').toLowerCase();
+        if (!LINKS[key]) { return 'open: choose one of ' + Object.keys(LINKS).join(' · '); }
+        open(LINKS[key]); return 'opening ' + LINKS[key];
+      },
+      clear: function () { scrollback.innerHTML = ''; document.title = '~yzhao'; return null; },
+      whoami: function () { return 'yzhao'; },
+      pwd: function () { return '/home/yzhao'; },
+      date: function () { return new Date().toString(); },
+      echo: function (args) { return esc(args.join(' ')); },
+      exit: function () { return 'There is no exit. Try <code>clear</code>.'; }
+    };
+    Object.keys(ALIAS).forEach(function (a) {
+      COMMANDS[a] = function () { return COMMANDS.cat([a]); };
+    });
+
+    function run(line) {
+      var parts = line.trim().split(/\s+/);
+      var cmd = parts[0];
+      if (!cmd) { print(''); return; }
+      var fn = COMMANDS[cmd.toLowerCase()];
+      if (!fn) { print(line, 'bash: ' + esc(cmd) + ': command not found. Try <code>help</code>.'); return; }
+      var out = fn(parts.slice(1));
+      if (out === null) { return; }
+      print(line, out);
+    }
+
+    // ---- input: history, tab completion, focus handling ----
+    var history = [], cursor = -1;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var line = input.value;
+      if (line.trim()) { history.push(line); }
+      cursor = history.length;
+      input.value = '';
+      run(line);
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (cursor > 0) { cursor -= 1; input.value = history[cursor]; }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (cursor < history.length - 1) { cursor += 1; input.value = history[cursor]; }
+        else { cursor = history.length; input.value = ''; }
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        var parts = input.value.split(/\s+/);
+        var last = parts[parts.length - 1];
+        var pool = parts.length > 1 ? Object.keys(FILES).concat(Object.keys(LINKS)) : Object.keys(COMMANDS);
+        var hits = pool.filter(function (w) { return w.indexOf(last) === 0; });
+        if (hits.length === 1) { parts[parts.length - 1] = hits[0]; input.value = parts.join(' ') + ' '; }
+        else if (hits.length > 1) { print(input.value, hits.join('  ')); }
+      } else if (e.key === 'l' && e.ctrlKey) {
+        e.preventDefault(); COMMANDS.clear();
+      }
+    });
+    input.addEventListener('focus', function () { form.classList.remove('idle'); });
+    input.addEventListener('blur', function () { if (!input.value) { form.classList.add('idle'); } });
+
+    // Click anywhere in the terminal (that is not a link or selection) to focus the prompt.
+    host.addEventListener('click', function (e) {
+      if (e.target.closest('a') || window.getSelection().toString()) { return; }
+      input.focus({ preventScroll: true });
+    });
+    // Start typing from anywhere on the page and it lands in the prompt.
+    document.addEventListener('keydown', function (e) {
+      if (e.target === input || e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) { return; }
+      input.focus();
+      screen.scrollTop = screen.scrollHeight;
+    });
+  })();
+  </script>
 </body>
 </html>
